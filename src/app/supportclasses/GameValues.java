@@ -19,6 +19,7 @@ public class GameValues {
         NOTSTARTED, RUNNING, WON, LOST, QUIT, PAUSED;
     }
 
+    /*
     public static Font getFont() {
         String GAME_FONT_FILE = "res//MainScreenFont.ttf";
         Font returningFont = null;
@@ -31,7 +32,7 @@ public class GameValues {
             System.err.println("Font not loaded.");
         }
         return returningFont;
-    }
+    }*/
 
     //Overall Application Values
     public double gameScale = 1;
@@ -47,8 +48,8 @@ public class GameValues {
     public int framesPerSecond = 0;
 
     public final String NAME = "Battle Arena - Sean McNamee";
-    public final Font gameFont = getFont();
-    public double fontSize = 0;
+    //public final Font gameFont = getFont();
+    //public double fontSize = 0;
 
     public GameState gameState = GameState.NOTSTARTED;
     public DisplayScreen currentScreen;

@@ -65,8 +65,7 @@ public class Button {
             g.drawImage(image, (int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(image.getWidth()*gameValues.gameScale), (int)(image.getHeight()*gameValues.gameScale), null);
         }   else {
             g.setColor(this.color);
-            g.fillRect((int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(image.getWidth()*gameValues.gameScale), (int)(image.getHeight()*gameValues.gameScale));
-
+            g.fillRect((int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(percentSize.x*gameValues.gameScale), (int)(percentSize.y*gameValues.gameScale));
         }
     }
 

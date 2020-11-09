@@ -48,7 +48,7 @@ public class GameField {
 
         gameMap.render(g);
 
-        this.gameValues.fontSize = 15.1522*gameValues.gameScale - .4976;
+        //this.gameValues.fontSize = 15.1522*gameValues.gameScale - .4976;
 
         /*
         if (gameValues.debugMode) {

@@ -14,6 +14,7 @@ public class MiniMap {
 		map = m;
 	}
 	
+	/*
 	public void render(Graphics g, Entity e) {
 		// Print out the entire map
 		double xStart, yStart;
@@ -70,6 +71,7 @@ public class MiniMap {
 		}
 
 	}
+*/
 
 	/**
 	 * @return A fraction representing how much of the screen the minimap takes up
