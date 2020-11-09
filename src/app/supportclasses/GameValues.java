@@ -38,8 +38,9 @@ public class GameValues {
     public double gameScale = 1;
     public double frameWidth = 790;
     public double frameHeight = 590;
-    public final int WIDTH_SCALE_1 = 790;//960;//300;
     public final int HEIGHT_SCALE_1 = 590;//WIDTH_SCALE_1 / 12 * 9;
+    public final int WIDTH_SCALE_1 = (int) (HEIGHT_SCALE_1 * (1+8.0/9.0));
+    
     
     public final double goalTicksPerSecond = 60.0;
     public final double NANO_SECONDS_PER_TICK = 1000000000d / goalTicksPerSecond; // (NanoSeconds/1 seconds) * (1 second/nanoseconds in 1 tick)
@@ -54,7 +55,7 @@ public class GameValues {
     public GameState gameState = GameState.NOTSTARTED;
     public DisplayScreen currentScreen;
 
-    public boolean debugMode = true;
+    public boolean debugMode = false;
 
     //TitleScreen values
     public final float LIGHTEN_VALUE = .8f;

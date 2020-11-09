@@ -18,6 +18,7 @@ public class Player extends Movable {
         super(gameValues, location, gameValues.PLAYER_COLOR);
         setStats();
         setSizings();
+        System.out.println(this.location.toString());
     }
 
     private void setStats() {
@@ -46,6 +47,8 @@ public class Player extends Movable {
         } else if (e.getKeyCode() == gameValues.runKey && !this.isRunning) {
             this.isRunning = true;
             this.maxSpeed *= this.gameValues.RUN_FACTOR;
+        } else if (e.getKeyCode() == KeyEvent.VK_1) {
+            this.centerScreen();
         }
         accelerate(moveUp, moveDown, moveLeft, moveRight);
     }
@@ -83,8 +86,10 @@ public class Player extends Movable {
     }
 
     private void updateScreenPosition(double xChange, double yChange) {
-        gameValues.fieldXZeroOffset += xChange;
-        gameValues.fieldYZeroOffset += yChange;
+        centerScreen();
+        
+        //gameValues.fieldXZeroOffset += xChange;
+        //gameValues.fieldYZeroOffset += yChange;
     }
 
     /*

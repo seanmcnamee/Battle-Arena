@@ -36,11 +36,16 @@ public class GameField {
         //final double halfABlock = .5;
         //this.gameValues.fieldXZero = gameValues.fieldXStart+(gameValues.singleSquareX*(gameValues.WALL_THICKNESS+halfABlock));
         //this.gameValues.fieldYZero = gameValues.fieldYStart+(gameValues.singleSquareY*(gameValues.WALL_THICKNESS+halfABlock));
-		//g.setColor(Color.GRAY);
-        //g.fillRect(100, 10, 500, 500);
-        //g.fillRect((int)(this.gameValues.fieldXStart), (int)(gameValues.fieldYStart), (int)(gameValues.fieldXSize), (int)(gameValues.fieldYSize));
-
+		
         gameMap.render(g);
+
+		g.setColor(Color.GRAY);
+        //g.fillRect(100, 10, 500, 500);
+        g.fillRect((int)(0), (int)(0), (int)(gameValues.frameWidth), (int)(gameValues.fieldYStart));
+		g.fillRect((int)(0), (int)(0), (int)(gameValues.fieldXStart), (int)(gameValues.frameHeight));
+		g.fillRect((int)(this.gameValues.fieldXStart+gameValues.fieldXSize), (int)(0), (int)(this.gameValues.fieldXStart), (int)(gameValues.frameHeight));
+		g.fillRect((int)(0), (int)(gameValues.fieldYStart+gameValues.fieldYSize), (int)(gameValues.frameWidth), (int)(gameValues.fieldYStart));
+
 
         //this.gameValues.fontSize = 15.1522*gameValues.gameScale - .4976;
 

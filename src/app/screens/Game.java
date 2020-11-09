@@ -27,9 +27,10 @@ public class Game extends DisplayScreen{
     }
 
     public void initialize() {
-        Player player = new Player(this.gameValues, new Point2D.Double((gameValues.FIELD_X_SPACES-1)/2.0, (gameValues.FIELD_Y_SPACES-1)/2.0));
+        Player player = new Player(this.gameValues, 
+                        new Point2D.Double((2*gameValues.WALL_THICKNESS+gameValues.MAPSIZE.x-1)/2.0, 
+                                            (2*gameValues.WALL_THICKNESS+gameValues.MAPSIZE.y-1)/2.0));
         gameField = new GameField(this.gameValues, player);
-        System.out.println("WOOT WOOT, GAME MADE!");
     }
 
 
@@ -41,8 +42,8 @@ public class Game extends DisplayScreen{
         this.gameValues.fieldXSize = gameValues.WIDTH_SCALE_1*(gameValues.gameScale);
         this.gameValues.fieldYSize = gameValues.HEIGHT_SCALE_1*(gameValues.gameScale);
 
-        this.gameValues.singleSquareX = (gameValues.fieldXSize)/(gameValues.FIELD_X_SPACES+gameValues.WALL_THICKNESS*2);// - gameValues.WALL_THICKNESS*2;
-        this.gameValues.singleSquareY = (gameValues.fieldYSize)/(gameValues.FIELD_Y_SPACES+gameValues.WALL_THICKNESS*2);// - gameValues.WALL_THICKNESS*2;
+        this.gameValues.singleSquareX = (gameValues.fieldXSize)/(gameValues.FIELD_X_SPACES);
+        this.gameValues.singleSquareY = (gameValues.fieldYSize)/(gameValues.FIELD_Y_SPACES);
 
         double excessWidth = gameValues.frameWidth-(gameValues.WIDTH_SCALE_1*gameValues.gameScale);
         double excessHeight = gameValues.frameHeight-(gameValues.HEIGHT_SCALE_1*gameValues.gameScale);
