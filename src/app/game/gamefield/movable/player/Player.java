@@ -1,20 +1,21 @@
 package app.game.gamefield.movable.player;
 
-import java.awt.Color;
-import java.awt.geom.Point2D.Double;
+import java.awt.geom.Point2D;
 import java.awt.event.KeyEvent;
 
+import app.game.gamefield.map.Map;
 import app.game.gamefield.movable.Movable;
 import app.supportclasses.GameValues;
 import app.supportclasses.SpriteSheet;
 import app.game.gamefield.touchable.HitBox;
+import app.game.gamefield.touchable.Touchable;
 
 public class Player extends Movable {
     private boolean moveUp, moveDown, moveLeft, moveRight;
     private boolean isRunning;
 
-    public Player(GameValues gameValues, Double location, Color c) {
-        super(gameValues, location, Color.GREEN);
+    public Player(GameValues gameValues, Point2D.Double location) {
+        super(gameValues, location, gameValues.PLAYER_COLOR);
         setStats();
         setSizings();
     }
@@ -27,7 +28,7 @@ public class Player extends Movable {
 
     private void setSizings() {
         SpriteSheet ss = new SpriteSheet(gameValues.SPRITE_SHEET);
-        this.image = ss.grabImage(gameValues.SS_PLAYER_LOCATION, gameValues.SS_PLAYER_SIZE, gameValues.SINGLE_BOX_SIZE);
+        this.image = ss.shrink(ss.grabImage(gameValues.SS_PLAYER_LOCATION, gameValues.SS_PLAYER_SIZE, gameValues.SINGLE_BOX_SIZE));
         this.hitbox = new HitBox();
         this.sizeInBlocks = gameValues.PLAYER_SIZE;
     }
@@ -66,10 +67,18 @@ public class Player extends Movable {
     }
 
     @Override
-    public void updateVelocityAndLocation() {
+    public void updateLocation() {
         double previousX = this.location.x;
         double previousY = this.location.y;
-        super.updateVelocityAndLocation();
+        super.updateLocation();
+        updateScreenPosition(this.location.x - previousX, this.location.y - previousY);
+    }
+
+    @Override
+    public void updateFromCollision(Touchable t, Map m) {
+        double previousX = this.location.x;
+        double previousY = this.location.y;
+        super.updateFromCollision(t, m);
         updateScreenPosition(this.location.x - previousX, this.location.y - previousY);
     }
 

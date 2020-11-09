@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 
 import app.game.GameField;
+import app.game.gamefield.movable.player.Player;
 import app.supportclasses.DisplayScreen;
 import app.supportclasses.GameValues;
 
@@ -23,14 +24,12 @@ public class Game extends DisplayScreen{
     public Game(JFrame frame, GameValues gameValues) {
         super(frame);
         this.gameValues = gameValues;
-        
-        //TODO see if this will work once the button is pressed.
-        //initialize();
     }
 
     public void initialize() {
-        PlayerOld player = new PlayerOld(this.gameValues, new Point2D.Double((gameValues.FIELD_X_SPACES-1)/2.0, (gameValues.FIELD_Y_SPACES-1)/2.0));
+        Player player = new Player(this.gameValues, new Point2D.Double((gameValues.FIELD_X_SPACES-1)/2.0, (gameValues.FIELD_Y_SPACES-1)/2.0));
         gameField = new GameField(this.gameValues, player);
+        System.out.println("WOOT WOOT, GAME MADE!");
     }
 
 
@@ -39,6 +38,17 @@ public class Game extends DisplayScreen{
     }
 
     public void render(Graphics g) {
+        this.gameValues.fieldXSize = gameValues.WIDTH_SCALE_1*(gameValues.gameScale);
+        this.gameValues.fieldYSize = gameValues.HEIGHT_SCALE_1*(gameValues.gameScale);
+
+        this.gameValues.singleSquareX = (gameValues.fieldXSize)/(gameValues.FIELD_X_SPACES+gameValues.WALL_THICKNESS*2);// - gameValues.WALL_THICKNESS*2;
+        this.gameValues.singleSquareY = (gameValues.fieldYSize)/(gameValues.FIELD_Y_SPACES+gameValues.WALL_THICKNESS*2);// - gameValues.WALL_THICKNESS*2;
+
+        double excessWidth = gameValues.frameWidth-(gameValues.WIDTH_SCALE_1*gameValues.gameScale);
+        double excessHeight = gameValues.frameHeight-(gameValues.HEIGHT_SCALE_1*gameValues.gameScale);
+        this.gameValues.fieldXStart = excessWidth/2.0;
+        this.gameValues.fieldYStart = excessHeight/2.0;
+
         gameField.render(g);
     }
 

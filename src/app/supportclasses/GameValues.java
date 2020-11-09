@@ -57,8 +57,8 @@ public class GameValues {
     public boolean debugMode = true;
 
     //TitleScreen values
-    public final float DARKEN_VALUE = .8f;
-    public final float LIGHTEN_VALUE = 1.26f;
+    public final float LIGHTEN_VALUE = .8f;
+    public final float DARKEN_VALUE = 1.26f;
     public final double START_BUTTON_Y = .5;
     public final double START_BUTTON_X = .5;
 
@@ -66,7 +66,7 @@ public class GameValues {
     
     //GameField Sizing
     public final Point MAPSIZE = new Point(50, 50);
-    public final int FIELD_X_SPACES = 20;
+    public final int FIELD_X_SPACES = 40;
     public final int FIELD_Y_SPACES = HEIGHT_SCALE_1*FIELD_X_SPACES/WIDTH_SCALE_1;  
     public final int WALL_THICKNESS = 1;
 
@@ -95,10 +95,10 @@ public class GameValues {
     
 
     //Player
-    public final Point2D.Double PLAYER_SIZE = new Point2D.Double(1.0, 1.0);
+    public final Point2D.Double PLAYER_SIZE = new Point2D.Double(2.0, 2.0);
     public final int MAX_POSSIBLE_PLAYER_HEALTH = 24; //Should be divisible by 4 (2 to make it full hearts, 2 more for equal rows for display)
     public final double ACCELERATION_RATE = 10.0;
-    public final double MAX_SPEED = 6.0;
+    public final double MAX_SPEED = 10.0;
     public final double RUN_FACTOR = 1.4;
 
     //User inputs
@@ -117,4 +117,6 @@ public class GameValues {
     public final double sludgeAccelerationChange = 1.0/3.0;
     
 
+    //MiniMap
+    public final Color PLAYER_COLOR = Color.GREEN;
 }

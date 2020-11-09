@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.Point;
 import java.awt.Color;
 
+import app.game.gamefield.map.Map;
 import app.game.gamefield.touchable.Touchable;
 import app.supportclasses.GameValues;
 
@@ -32,7 +33,7 @@ public class Movable extends Touchable {
         percentAcceleration.y = (int)Math.signum(yAcc);
     }
 
-    private Point2D.Double getNextVelocity() {
+    public void updateVelocity() {
         //Converts from blocks/second to blocks/tick
         final double acceleration = accelerationRate/gameValues.goalTicksPerSecond;
         final double friction = gameValues.friction/gameValues.goalTicksPerSecond;
@@ -61,25 +62,49 @@ public class Movable extends Touchable {
             tempPercentVelocity.y *= (1-changeWhenFull);
         }
 
-        return tempPercentVelocity;
-    }
-
-    public Point2D.Double getNextLocation() {
-        Point2D.Double nextVelocity = getNextVelocity();
-        return calculateNextLocation(nextVelocity);
-    }
-
-    private Point2D.Double calculateNextLocation(Point2D.Double nextVelocity) {
-        return new Point2D.Double(this.location.x + nextVelocity.x, this.location.y + nextVelocity.y);
-    }
-
-    public void updateVelocityAndLocation() {
-        this.percentVelocity = getNextVelocity();
-        this.location = calculateNextLocation(this.percentVelocity);
+        this.percentVelocity = tempPercentVelocity;
     }
 
     public void centerScreen() {
         gameValues.fieldXZeroOffset = this.location.x - gameValues.FIELD_X_SPACES/2.0;
         gameValues.fieldYZeroOffset = this.location.y - gameValues.FIELD_Y_SPACES/2.0;
+    }
+
+    public double maxSpeedPerTick() {
+        return this.maxSpeed / gameValues.goalTicksPerSecond;
+    }
+
+    public Point2D.Double getNextLocation() {
+        return calculateNextLocation();
+    }
+
+    private Point2D.Double calculateNextLocation() {
+        return new Point2D.Double(this.location.x + maxSpeedPerTick()*this.percentVelocity.x, this.location.y + maxSpeedPerTick()*this.percentVelocity.y);
+    }
+
+    public void updateLocation() {
+        this.location = calculateNextLocation();
+    }
+
+    public void updateFromCollision(Touchable t, Map m) {
+        Point2D.Double nextLocation = getNextLocation();
+
+        Point2D.Double noYChange = new Point2D.Double(nextLocation.x, location.y);
+        boolean isCollisionWithNoY = (m.collisionWith(this, noYChange) != null);
+        if (!isCollisionWithNoY) {
+            this.percentVelocity.y = 0;
+            this.location = noYChange;
+            return;
+        }
+
+        Point2D.Double noXChange = new Point2D.Double(location.x, nextLocation.y);
+        boolean isCollisionWithNoX = (m.collisionWith(this, noXChange) != null);
+        if (!isCollisionWithNoX) {
+            this.percentVelocity.x = 0;
+            this.location = noXChange;
+            return;
+        }
+        
+        this.percentVelocity = new Point2D.Double(0, 0);
     }
 }

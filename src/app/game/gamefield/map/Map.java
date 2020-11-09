@@ -59,10 +59,10 @@ public class Map {
     private void renderMap(Graphics g) {
         //TODO add a margin so that walking looks smooth?
         int margin = 0;
-        int startXIndex = Math.max((int) gameValues.fieldXZeroOffset - margin, 0);
-        int startYIndex = Math.max((int) gameValues.fieldYZeroOffset - margin, 0);
-        int endXIndex = Math.min(startXIndex+gameValues.FIELD_X_SPACES + 2*margin, map.length);
-        int endYIndex = Math.min(startYIndex+gameValues.FIELD_Y_SPACES + 2*margin, map.length);
+        int startXIndex = 0;//Math.max((int) gameValues.fieldXZeroOffset - margin, 0);
+        int startYIndex = 0;//Math.max((int) gameValues.fieldYZeroOffset - margin, 0);
+        int endXIndex = map.length;//Math.min(startXIndex+gameValues.FIELD_X_SPACES + 2*margin, map.length);
+        int endYIndex = map[0].length;//Math.min(startYIndex+gameValues.FIELD_Y_SPACES + 2*margin, map[0].length);
 
         //Only render elements based on the screen offset
         for (int x = startXIndex; x < endXIndex; x++) {
@@ -80,25 +80,31 @@ public class Map {
 
     public void tick() {
         for (Movable m : this.movables) {
-            Touchable collidingTouchable = collidesWithTouchable(m);
-            if (collidingTouchable == null) {
-                m.updateVelocityAndLocation();
-            }   else {
-                //TODO allow the movable to deal with the collision
+            m.updateVelocity();
+            Point2D.Double nextLocation = m.getNextLocation();
+            Touchable collidingTouchable = collisionWith(m, nextLocation);
+            if (collidingTouchable != null) {
+                System.out.println("Collision");
+                m.updateFromCollision(collidingTouchable, this);
+            } else {
+                m.updateLocation();
             }
         }
     }
 
-    private Touchable collidesWithTouchable(Movable m) {
-        Point2D.Double nextLocation = m.getNextLocation();
-        Touchable collidingTouchable = null;
-        for (Touchable t : this.touchables) {
-            if (!m.equals(t) && m.contains(nextLocation, t)) {
-                collidingTouchable = t;
-                break;
+    /**
+     * Check if the movable collides with any touchable (besides itself)
+     * @param m
+     * @param testLocation
+     * @return The touchable it collides with, or null
+     */
+    public Touchable collisionWith(Movable m, Point2D.Double testLocation) {
+        for (Touchable touchable : this.touchables) {
+            if (!m.equals(touchable) && m.contains(testLocation, touchable)) {
+                return touchable;
             }
         }
-        return collidingTouchable;
+        return null;
     }
 
     public void addMovable(Movable m) {

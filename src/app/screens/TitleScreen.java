@@ -32,7 +32,7 @@ public class TitleScreen extends DisplayScreen {
         //background = new BufferedImageLoader(gameValues.MAIN_MENU_FILE);
         //SpriteSheet buttons = new SpriteSheet(gameValues.MAIN_MENU_BUTTONS);
         
-        btnStart = new Button(1.0, 1.0, (int)(gameValues.START_BUTTON_X*gameValues.WIDTH_SCALE_1), (int)(gameValues.START_BUTTON_Y*gameValues.HEIGHT_SCALE_1), Color.GRAY, gameValues);
+        btnStart = new Button(.5, .5, (int)(gameValues.START_BUTTON_X*gameValues.WIDTH_SCALE_1), (int)(gameValues.START_BUTTON_Y*gameValues.HEIGHT_SCALE_1), Color.GRAY, gameValues);
 
         
         this.gameValues = gameValues;

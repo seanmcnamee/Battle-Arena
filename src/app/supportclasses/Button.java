@@ -51,21 +51,14 @@ public class Button {
     }
 
     public void render(Graphics g) {
-        double xSize, ySize;
-        if (image != null) {
-            xSize = this.image.getWidth();
-            ySize = this.image.getHeight();
-        }   else {
-            xSize = this.percentSize.getX();
-            ySize = this.percentSize.getY();
-        }
-        double leftMost = pictureCenterLocation.getX()-xSize/2.0;
-        double topMost = pictureCenterLocation.getY()-ySize/2.0;
+
+        double leftMost = pictureCenterLocation.getX()-getXSize()/2.0;
+        double topMost = pictureCenterLocation.getY()-getYSize()/2.0;
         if (image != null) {
             g.drawImage(image, (int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(image.getWidth()*gameValues.gameScale), (int)(image.getHeight()*gameValues.gameScale), null);
         }   else {
             g.setColor(this.color);
-            g.fillRect((int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(percentSize.x*gameValues.gameScale), (int)(percentSize.y*gameValues.gameScale));
+            g.fillRect((int)(leftMost*gameValues.gameScale), (int)(topMost*gameValues.gameScale), (int)(getXSize()*gameValues.gameScale), (int)(getYSize()*gameValues.gameScale));
         }
     }
 
@@ -77,10 +70,11 @@ public class Button {
      */
     public boolean contains(Point other) {
         
-        double leftMost = gameValues.gameScale*(pictureCenterLocation.getX()-image.getWidth()/2.0);
-        double topMost = gameValues.gameScale*(pictureCenterLocation.getY()-image.getHeight()/2.0);
-        double rightMost = gameValues.gameScale*(pictureCenterLocation.getX()+image.getWidth()/2.0);
-        double bottomMost = gameValues.gameScale*(pictureCenterLocation.getY()+image.getHeight()/2.0);
+
+        double leftMost = gameValues.gameScale*(pictureCenterLocation.getX()-getXSize()/2.0);
+        double topMost = gameValues.gameScale*(pictureCenterLocation.getY()-getYSize()/2.0);
+        double rightMost = gameValues.gameScale*(pictureCenterLocation.getX()+getXSize()/2.0);
+        double bottomMost = gameValues.gameScale*(pictureCenterLocation.getY()+getYSize()/2.0);
 
         //System.out.println("Collision checking bounds: " + leftMost + ", " + topMost + " to " + rightMost + ", " + bottomMost);
         return Collisions.leftHandSideTest(leftMost, topMost, leftMost, bottomMost, other.getX(), other.getY()) &&
@@ -98,7 +92,8 @@ public class Button {
                     RescaleOp op = new RescaleOp(gameValues.DARKEN_VALUE, 0, null);
                     image = op.filter(image, null);
                 } else {
-                    this.color = new Color(gameValues.DARKEN_VALUE*color.getRed(), gameValues.DARKEN_VALUE*color.getGreen(), gameValues.DARKEN_VALUE*color.getBlue());
+                    this.color = Color.DARK_GRAY;
+                    //this.color = new Color(Math.min(255,gameValues.DARKEN_VALUE*color.getRed()), Math.min(255,gameValues.DARKEN_VALUE*color.getGreen()), Math.min(255,gameValues.DARKEN_VALUE*color.getBlue()));
                 }
             }   else {
                 //Make image brighter
@@ -106,13 +101,28 @@ public class Button {
                     RescaleOp op = new RescaleOp(gameValues.LIGHTEN_VALUE, 0, null);
                     image = op.filter(image, null);
                 } else {
-                    this.color = new Color(gameValues.LIGHTEN_VALUE*color.getRed(), gameValues.LIGHTEN_VALUE*color.getGreen(), gameValues.LIGHTEN_VALUE*color.getBlue());
+                    this.color = Color.GRAY;
+                    //this.color = new Color(gameValues.LIGHTEN_VALUE*color.getRed(), gameValues.LIGHTEN_VALUE*color.getGreen(), gameValues.LIGHTEN_VALUE*color.getBlue());
                 }
                 
             }
             isHovering = b;
         }
         
+    }
+
+    public double getXSize() {
+        if (image != null) {
+            return image.getWidth();
+        }
+        return gameValues.WIDTH_SCALE_1*percentSize.x;
+    }
+
+    public double getYSize() {
+        if (image != null) {
+            return image.getHeight();
+        }
+        return gameValues.WIDTH_SCALE_1*percentSize.y;
     }
 
     public boolean isHovering() {
