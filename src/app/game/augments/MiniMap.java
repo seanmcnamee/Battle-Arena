@@ -1,11 +1,10 @@
-package app.game.server;
+package app.game.augments;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import ClientSide.Player;
-import ServerSide.Entities.Rock;
-import game.Game;
+import app.game.gamefield.map.Map;
+
 
 public class MiniMap {
 	private double sizeRatio = 1.0 / 8.0;

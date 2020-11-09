@@ -29,9 +29,8 @@ public class Game extends DisplayScreen{
     }
 
     public void initialize() {
-        Player player = new Player(this.gameValues, gameValues.chosenCharacter, new Point2D.Double((gameValues.FIELD_X_SPACES-1)/2.0, (gameValues.FIELD_Y_SPACES-1)/2.0));
+        PlayerOld player = new PlayerOld(this.gameValues, new Point2D.Double((gameValues.FIELD_X_SPACES-1)/2.0, (gameValues.FIELD_Y_SPACES-1)/2.0));
         gameField = new GameField(this.gameValues, player);
-        gameBar = new GameBar(this.gameValues, gameField);
     }
 
 
@@ -41,13 +40,13 @@ public class Game extends DisplayScreen{
 
     public void render(Graphics g) {
         gameField.render(g);
-        gameBar.render(g);
     }
 
     public void mouseMoved(MouseEvent e) {
     }
 
     public void mouseWheelMoved(MouseWheelEvent e) {
+        gameField.mouseWheelMoved(e);
     }
 
     @Override

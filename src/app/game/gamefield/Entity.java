@@ -29,10 +29,10 @@ public abstract class Entity implements TickAction {
 		double eYM = e.getYMap();
 		double eXS = Game.WIDTH/2;
 		double eYS = Game.HEIGHT/2;
-		if (e instanceof Player)
+		if (e instanceof PlayerOld)
 		{
-			eXS = ((Player) e).getXScreen();
-			eYS = ((Player) e).getYScreen();
+			eXS = ((PlayerOld) e).getXScreen();
+			eYS = ((PlayerOld) e).getYScreen();
 			//System.out.println("PLAYER DATA:");
 			//System.out.println("Map Pos: " + eXM + ", " + eYM);
 			//System.out.println("Screen Pos: " + eXS + ", " + eYS);
@@ -63,10 +63,10 @@ public abstract class Entity implements TickAction {
 		
 		double xSPos = Game.WIDTH / 2.0;
 		double ySPos = Game.HEIGHT / 2.0;
-		if (this instanceof Player)
+		if (this instanceof PlayerOld)
 		{
-			xSPos = ((Player)this).getXScreen();
-			ySPos = ((Player)this).getYScreen();
+			xSPos = ((PlayerOld)this).getXScreen();
+			ySPos = ((PlayerOld)this).getYScreen();
 		}
 		
 		double xDraw = (xSPos - xUnitSize/2) * Game.SCALE;

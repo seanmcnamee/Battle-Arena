@@ -1,219 +1,134 @@
 package app.game.gamefield.map;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import ClientSide.Player;
-import ServerSide.Entities.Rock;
-import game.BufferedImageLoader;
-import game.Game;
-import game.KeyInput;
-import game.SpriteSheet;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.awt.geom.Point2D;
+
+import app.supportclasses.GameValues;
+import app.supportclasses.SpriteSheet;
+import app.game.gamefield.drawable.Drawable;
+import app.game.gamefield.touchable.Touchable;
+import app.game.gamefield.movable.Movable;
 
 public class Map {
+    private Drawable[][] map; //These drawables will always be present
+    private ArrayList<Drawable> drawables; //These drawables can be removed
+    private ArrayList<Touchable> touchables; //All touchables (for collision detection), not all can be removed
+    private ArrayList<Movable> movables; //All movables (for tick update)
+    private GameValues gameValues;
 
-	private ArrayList<Entity> entities; //objects and players
-	private Tile[][] map;
-	MiniMap minimap;
-	public static final int MAPSIZE = 50;
-	public static final int MAPBORDER = 5;
-	private int renderRadius = Game.WIDTH / 16 + 1;
+    public Map(GameValues gameValues) {
+        this.map = new Drawable[gameValues.MAPSIZE.x+2*gameValues.WALL_THICKNESS][gameValues.MAPSIZE.y+2*gameValues.WALL_THICKNESS];
+        this.drawables = new ArrayList<Drawable>();
+        this.touchables = new ArrayList<Touchable>();
+        this.movables = new ArrayList<Movable>();
+        this.gameValues = gameValues;
+        initializeMap();
+    }
 
-	public Map() {
-		map = new Tile[MAPSIZE + 2 * MAPBORDER][MAPSIZE + 2 * MAPBORDER];
-		entities = new ArrayList<Entity>();
-		init();
-		System.out.println("RenderRadius: " + renderRadius);
-		minimap = new MiniMap(this);
-	}
+    private void initializeMap() {
+        SpriteSheet ss = new SpriteSheet(gameValues.SPRITE_SHEET);
 
-	private void init() {
-		BufferedImageLoader loader = new BufferedImageLoader();
-		BufferedImage spriteSheet = null;
-		try {
-			spriteSheet = loader.loadImage("/sprite_sheet.png");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		BufferedImage insideImg = ss.grabImage(gameValues.SS_INNER_TILE_LOCATION, gameValues.SS_TILE_SIZE, gameValues.SINGLE_BOX_SIZE);
+        BufferedImage outsideImg = ss.grabImage(gameValues.SS_OUTTER_TILE_LOCATION, gameValues.SS_TILE_SIZE, gameValues.SINGLE_BOX_SIZE);
+        
+        //TopLeft regular tile is (0,0)
+		for (int x = 0; x < this.map.length; x++) {
+			for (int y = 0; y < this.map[x].length; y++) {
+                int xPos = x - gameValues.WALL_THICKNESS;
+                int yPos = y - gameValues.WALL_THICKNESS;
 
-		// Uses the SpriteSheet class to get a specific image from the sprite sheet
-		SpriteSheet ss = new SpriteSheet(spriteSheet);
-
-		BufferedImage insideImg = ss.grabImage(0, 0, 1, 1);
-		BufferedImage outsideImg = ss.grabImage(2, 0, 1, 1);
-		BufferedImage tileImg;
-
-		for (int x = 0; x < map.length; x++) {
-			for (int y = 0; y < map[x].length; y++) {
-				if (x < MAPBORDER || x >= MAPSIZE + MAPBORDER || y < MAPBORDER || y >= MAPSIZE + MAPBORDER) {
-					tileImg = outsideImg;
+				if (x < gameValues.WALL_THICKNESS || x >= gameValues.MAPSIZE.x + gameValues.WALL_THICKNESS || y < gameValues.WALL_THICKNESS || y >= gameValues.MAPSIZE.y + gameValues.WALL_THICKNESS) {
+                    Touchable wall = new Touchable(gameValues, xPos, yPos, outsideImg, gameValues.INGAME_TILE_SIZE);
+                    map[x][y] = wall;
+                    this.touchables.add(wall); //Walls will be used for collision
 				} else {
-					tileImg = insideImg;
-				}
-				map[x][y] = new Tile(x - MAPBORDER, y - MAPBORDER, tileImg);
-			}
-		}
-		
-		entities.add(new Rock(10, 10, ss.grabImage(3, 0, 1, 1)));
-	}
-
-	public void tick() {
-		
-		for (int i = 0; i < entities.size(); i++) {
-			//Set the entity's velocity
-			entities.get(i).tick();
-			boolean canMove = true;
-			for (int j = 0; j < entities.size(); j++) {
-				if (entities.get(i) instanceof MovableOld && entities.get(i) != entities.get(j))
-				{
-					if (((MovableOld) entities.get(i)).checkCollision(entities.get(j), ((MovableOld)entities.get(i)).getxVel(), ((MovableOld)entities.get(i)).getyVel()))
-					{
-						canMove = false;
-					}
+					map[x][y] = new Drawable(gameValues, xPos, yPos, insideImg, gameValues.INGAME_TILE_SIZE);
 				}
 			}
-			//If you can move and you're movable
-			if (canMove && (entities.get(i) instanceof MovableOld))
-			{
-				((MovableOld)entities.get(i)).updatePosition( ((MovableOld)entities.get(i)).getxVel(), ((MovableOld)entities.get(i)).getyVel() );
-				if (entities.get(i) instanceof Player)
-				{
-					((Player) entities.get(i)).updateScreenPosTick();
-				}
-				((Player) entities.get(i)).updateScreenPos(((Player) entities.get(i)).getxSVel(), ((Player) entities.get(i)).getySVel());
-				//System.out.println("Velocity Clear: " + ((Movable)entities.get(i)).getxVel() + ", " + ((Movable)entities.get(i)).getyVel());
-			}	else if((entities.get(i) instanceof Player))
-			{
-				((Player) entities.get(i)).updateScreenPos(((Player) entities.get(i)).getxSVel(), ((Player) entities.get(i)).getySVel());
-				//((Player) entities.get(i)).setXScreen(((Player) entities.get(i)).getXScreen()+((Player) entities.get(i)));
-				System.out.println("Velocity Hitting: " + ((MovableOld)entities.get(i)).getxVel() + ", " + ((MovableOld)entities.get(i)).getyVel());
-			}
 		}
-	}
+    }
 
-	//Render in relation to Who/What
-	public void render(Graphics g, Entity e) {
+    public void render(Graphics g) {
+        renderMap(g);
+        renderDrawables(g);
+    }
 
-		
-		double eXM = e.getXMap();
-		double eYM = e.getYMap();
-		double eXS = Game.WIDTH/2;
-		double eYS = Game.HEIGHT/2;
-		if (e instanceof Player)
-		{
-			eXS = ((Player) e).getXScreen();
-			eYS = ((Player) e).getYScreen();
-		}
-		
-		
-		double xSM;
-		double ySM;
+    private void renderMap(Graphics g) {
+        //TODO add a margin so that walking looks smooth?
+        int margin = 0;
+        int startXIndex = Math.max((int) gameValues.fieldXZeroOffset - margin, 0);
+        int startYIndex = Math.max((int) gameValues.fieldYZeroOffset - margin, 0);
+        int endXIndex = Math.min(startXIndex+gameValues.FIELD_X_SPACES + 2*margin, map.length);
+        int endYIndex = Math.min(startYIndex+gameValues.FIELD_Y_SPACES + 2*margin, map.length);
 
-		int lowX;
-		int lowY;
-		int highX;
-		int highY;
+        //Only render elements based on the screen offset
+        for (int x = startXIndex; x < endXIndex; x++) {
+            for (int y = startYIndex; y < endYIndex; y++) {
+                map[x][y].render(g);
+            }
+        }
+    }
 
-		// Setting render chunks
-		xSM = eXS / 8.0 - (Game.WIDTH / 16.0);
-		ySM = eYS / 8.0 - (Game.HEIGHT / 16.0);
+    private void renderDrawables(Graphics g) {
+        for (Drawable d : drawables) {
+            d.render(g);
+        }
+    }
 
-		lowX = (int) (eXM - renderRadius + MAPBORDER - xSM);
-		lowY = (int) (eYM - renderRadius + MAPBORDER - ySM);
-		highX = (int) (eXM + renderRadius + MAPBORDER + 1 - xSM);
-		highY = (int) (eYM + renderRadius + MAPBORDER - ySM);
+    public void tick() {
+        for (Movable m : this.movables) {
+            Touchable collidingTouchable = collidesWithTouchable(m);
+            if (collidingTouchable == null) {
+                m.updateVelocityAndLocation();
+            }   else {
+                //TODO allow the movable to deal with the collision
+            }
+        }
+    }
 
-		// Making sure those chunks are in range
-		if (lowX < 0) {
-			lowX = 0;
-		}
-		if (lowX > map.length) {
-			lowX = map.length;
-		}
-		if (lowY < 0) {
-			lowY = 0;
-		}
-		if (lowY > map.length) {
-			lowY = map.length;
-		}
+    private Touchable collidesWithTouchable(Movable m) {
+        Point2D.Double nextLocation = m.getNextLocation();
+        Touchable collidingTouchable = null;
+        for (Touchable t : this.touchables) {
+            if (!m.equals(t) && m.contains(nextLocation, t)) {
+                collidingTouchable = t;
+                break;
+            }
+        }
+        return collidingTouchable;
+    }
 
-		if (highX < 0) {
-			highX = 0;
-		}
-		if (highX > map.length) {
-			highX = map.length;
-		}
-		if (highY < 0) {
-			highY = 0;
-		}
-		if (highY > map.length) {
-			highY = map.length;
-		}
+    public void addMovable(Movable m) {
+        this.movables.add(m);
+        addTouchable(m);
+    }
 
-		// Print out tiles
-		for (int x = lowX; x < highX; x++) {
-			for (int y = lowY; y < highY; y++) {
-				map[x][y].render(g, e);
-			}
-		}
+    public void addTouchable(Touchable t) {
+        this.touchables.add(t);
+        addDrawable(t);
+    }
 
-		for (int i = 0; i < entities.size(); i++) {
-			if (entities.get(i) != e)
-			{
-				entities.get(i).render(g, e);
-			}	else
-			{
-				entities.get(i).render(g);
-			}
-			
-		}
+    public void addDrawable(Drawable d) {
+        this.drawables.add(d);
+    }
 
-		minimap.render(g, e);
-	}
+    public void removeMovable(Movable m) {
+        this.movables.remove(m);
+        removeTouchable(m);
+    }
+    /**
+     * Never remove a tile!! If you do, removing it from the Matrix will have to happen
+     * @param t
+     */
+    public void removeTouchable(Touchable t) {
+        this.touchables.remove(t);
+        removeDrawable(t);
+    }
 
-	public void render(Graphics g) {
-
-		int lowX;
-		int lowY;
-		int highX;
-		int highY;
-
-		lowX = 0;
-		lowY = 0;
-		highX = MAPSIZE + MAPBORDER * 2 -1;
-		highY = MAPSIZE + MAPBORDER * 2 -1;
-
-
-		// Print out tiles
-		for (int x = lowX; x < highX; x++) {
-			for (int y = lowY; y < highY; y++) {
-				map[x][y].render(g);
-			}
-		}
-
-		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).render(g);
-		}
-
-		minimap.render(g, null);
-	}
-
-	public void addEntity(Entity e) {
-		entities.add(e);
-	}
-
-	public void removeEntity(Entity e) {
-		entities.remove(e);
-	}
-
-	public ArrayList<Entity> getEntities() {
-		return entities;
-	}
-	
-	public void setRenderRadius(int r) {
-		renderRadius = r;
-	}
-
+    public void removeDrawable(Drawable d) {
+        this.drawables.remove(d);
+    }
 }

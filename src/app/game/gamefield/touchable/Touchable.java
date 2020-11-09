@@ -1,29 +1,54 @@
 package app.game.gamefield.touchable;
 
 import java.awt.geom.Point2D;
-
+import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics;
 
+import app.game.augments.MiniMapable;
 import app.game.gamefield.drawable.Drawable;
 import app.game.gamefield.drawable.DrawingCalculator;
 import app.supportclasses.Collisions;
 import app.supportclasses.GameValues;
 
-public class Touchable extends Drawable {
+public class Touchable extends Drawable implements MiniMapable {
     protected HitBox hitbox;
+    protected boolean shouldMap;
+    protected Color colorToMap;
 
-    public Touchable(GameValues gameValues, Point2D.Double location) {
-        super(gameValues, location);
+
+    public Touchable(GameValues gameValues, double xPos, double yPos, BufferedImage image, Point2D.Double sizeInBlocks) {
+        this(gameValues, new Point2D.Double(xPos, yPos), image, sizeInBlocks);
     }
+
+    public Touchable(GameValues gameValues, Point2D.Double location, BufferedImage image, Point2D.Double sizeInBlocks) {
+        super(gameValues, location, image, sizeInBlocks);
+        this.image = image;
+        this.shouldMap = false;
+        this.hitbox = new HitBox();
+        
+    }
+
+    public Touchable(GameValues gameValues, double xPos, double yPos, Color color) {
+        this(gameValues, new Point2D.Double(xPos, yPos), color);
+    }
+
+    public Touchable(GameValues gameValues, Point2D.Double location, Color color) {
+        super(gameValues, location);
+        this.shouldMap = true;
+        this.colorToMap = color;
+    }
+
+
 
     public void render(Graphics g) {
         super.render(g);
         if (gameValues.debugMode) {
             g.drawRect(
                     DrawingCalculator.findPixelLocation(getHitBoxLocation().getX(), getHitBoxSizeInBlocks().getX(),
-                            gameValues.fieldXZero, gameValues.singleSquareX),
+                            gameValues.fieldXZeroOffset, gameValues.singleSquareX),
                     DrawingCalculator.findPixelLocation(getHitBoxLocation().getY(), getHitBoxSizeInBlocks().getY(),
-                            gameValues.fieldYZero, gameValues.singleSquareY),
+                            gameValues.fieldYZeroOffset, gameValues.singleSquareY),
                     DrawingCalculator.findPixelSize(getHitBoxSizeInBlocks().getX(), gameValues.singleSquareX),
                     DrawingCalculator.findPixelSize(getHitBoxSizeInBlocks().getY(), gameValues.singleSquareY));
         }
@@ -83,6 +108,10 @@ public class Touchable extends Drawable {
          */
     }
 
+    public void setHitBox(HitBox hitbox) {
+        this.hitbox = hitbox;
+    }
+
     protected HitBox getHitBox() {
         return hitbox;
     }
@@ -93,5 +122,15 @@ public class Touchable extends Drawable {
 
     protected Point2D.Double getHitBoxSizeInBlocks() {
         return getHitBox().getHitBoxSize(sizeInBlocks);
+    }
+
+    @Override
+    public Color getColor() {
+        return this.colorToMap;
+    }
+
+    @Override
+    public boolean isDisplaying() {
+        return this.shouldMap;
     }
 }

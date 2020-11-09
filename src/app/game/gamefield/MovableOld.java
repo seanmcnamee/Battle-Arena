@@ -112,10 +112,10 @@ public abstract class MovableOld extends Entity{
 			    			//TODO turn pusing into a resistance formula
 			    			((MovableOld) e).updatePosition(xVel/2.0, yVel/2.0);
 			    			updatePosition(xVel/2.0, yVel/2.0);
-			    			if (this instanceof Player)
+			    			if (this instanceof PlayerOld)
 			    			{
-			    				((Player) this).setxSVel(((Player) this).getxVel()*SpriteSheet.SQUARE/2.0);
-			    				((Player) this).setySVel(((Player) this).getyVel()*SpriteSheet.SQUARE/2.0);
+			    				((PlayerOld) this).setxSVel(((PlayerOld) this).getxVel()*SpriteSheet.SQUARE/2.0);
+			    				((PlayerOld) this).setySVel(((PlayerOld) this).getyVel()*SpriteSheet.SQUARE/2.0);
 			    			}
 			    			//System.out.println("Checking between a movable and a movable.. " + e.getClass());
 						}	else
@@ -128,11 +128,11 @@ public abstract class MovableOld extends Entity{
 				    				//System.out.println("Didn't Hit!");
 				    				updatePosition(xVel, 0);
 				    				yVel = 0;
-				    				if (this instanceof Player)
+				    				if (this instanceof PlayerOld)
 				    				{
-				    					((Player) this).setySVel(0);
+				    					((PlayerOld) this).setySVel(0);
 				    					//((Player) this).setxSVel(0);
-				    					((Player) this).setxSVel(((Player) this).getxVel()*SpriteSheet.SQUARE);
+				    					((PlayerOld) this).setxSVel(((PlayerOld) this).getxVel()*SpriteSheet.SQUARE);
 				    					//xVel * SpriteSheet.SQUARE
 				    				}
 				    				//System.out.println("Updated Position xWise");
@@ -142,10 +142,10 @@ public abstract class MovableOld extends Entity{
 				    			{
 				    				updatePosition(0, yVel);
 				    				xVel = 0;
-				    				if (this instanceof Player)
+				    				if (this instanceof PlayerOld)
 				    				{
-				    					((Player) this).setxSVel(0);
-				    					((Player) this).setySVel(((Player) this).getyVel()*SpriteSheet.SQUARE);
+				    					((PlayerOld) this).setxSVel(0);
+				    					((PlayerOld) this).setySVel(((PlayerOld) this).getyVel()*SpriteSheet.SQUARE);
 				    				}
 				    				//System.out.println("Updated Position yWise");
 				    				//System.out.println();
@@ -155,10 +155,10 @@ public abstract class MovableOld extends Entity{
 				    				//updatePosition(-xVel, -yVel);
 				    				xVel = 0;
 				    				yVel = 0;
-				    				if (this instanceof Player)
+				    				if (this instanceof PlayerOld)
 				    				{
-				    					((Player) this).setxSVel(0);
-				    					((Player) this).setySVel(0);
+				    					((PlayerOld) this).setxSVel(0);
+				    					((PlayerOld) this).setySVel(0);
 				    				}
 				    				//System.out.println("Updated Position");
 				    				//System.out.println();
@@ -174,10 +174,10 @@ public abstract class MovableOld extends Entity{
 					    				updatePosition(xVel/Math.sqrt(2), xVel/Math.sqrt(2));
 					    				yVel = xVel/Math.sqrt(2);
 					    				xVel = xVel/Math.sqrt(2);
-					    				if (this instanceof Player)
+					    				if (this instanceof PlayerOld)
 					    				{
-					    					((Player) this).setySVel(yVel*SpriteSheet.SQUARE);
-					    					((Player) this).setxSVel(xVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setySVel(yVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setxSVel(xVel*SpriteSheet.SQUARE);
 					    				}
 					    				System.out.println("Was going x and adjusted y");
 					    			}	else if (!checkCollision(e, xVel/Math.sqrt(2), -xVel/Math.sqrt(2))) //If moving UR or DL mean no collision
@@ -185,20 +185,20 @@ public abstract class MovableOld extends Entity{
 					    				updatePosition(xVel/Math.sqrt(2), -xVel/Math.sqrt(2));
 					    				yVel = -xVel/Math.sqrt(2);
 					    				xVel = xVel/Math.sqrt(2);
-					    				if (this instanceof Player)
+					    				if (this instanceof PlayerOld)
 					    				{
-					    					((Player) this).setySVel(yVel*SpriteSheet.SQUARE);
-					    					((Player) this).setxSVel(xVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setySVel(yVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setxSVel(xVel*SpriteSheet.SQUARE);
 					    				}
 					    				System.out.println("Was going x and adjusted -y");
 					    			}	else
 					    			{
 					    				xVel = 0;
 					    				yVel = 0;
-						    			if (this instanceof Player)
+						    			if (this instanceof PlayerOld)
 					    				{
-						    				((Player) this).setxSVel(0);
-					    					((Player) this).setySVel(0);
+						    				((PlayerOld) this).setxSVel(0);
+					    					((PlayerOld) this).setySVel(0);
 					    				}
 						    			System.out.println("Was going x and couldn't adjust");
 					    			}
@@ -209,10 +209,10 @@ public abstract class MovableOld extends Entity{
 					    				updatePosition(yVel/Math.sqrt(2), yVel/Math.sqrt(2));
 					    				yVel = yVel/Math.sqrt(2);
 					    				xVel = yVel/Math.sqrt(2);
-					    				if (this instanceof Player)
+					    				if (this instanceof PlayerOld)
 					    				{
-					    					((Player) this).setySVel(yVel*SpriteSheet.SQUARE);
-					    					((Player) this).setxSVel(xVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setySVel(yVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setxSVel(xVel*SpriteSheet.SQUARE);
 					    				}
 					    				System.out.println("Was going y and adjusted x");
 					    			}	else if (!checkCollision(e, -yVel/Math.sqrt(2), yVel/Math.sqrt(2))) //If moving UR or DL mean no collision
@@ -220,20 +220,20 @@ public abstract class MovableOld extends Entity{
 					    				updatePosition(-yVel/Math.sqrt(2), yVel/Math.sqrt(2));
 					    				yVel = yVel/Math.sqrt(2);
 					    				xVel = -yVel/Math.sqrt(2);
-					    				if (this instanceof Player)
+					    				if (this instanceof PlayerOld)
 					    				{
-					    					((Player) this).setySVel(yVel*SpriteSheet.SQUARE);
-					    					((Player) this).setxSVel(xVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setySVel(yVel*SpriteSheet.SQUARE);
+					    					((PlayerOld) this).setxSVel(xVel*SpriteSheet.SQUARE);
 					    				}
 					    				System.out.println("Was going y and adjusted -x");
 					    			}	else
 					    			{
 					    				xVel = 0;
 					    				yVel = 0;
-						    			if (this instanceof Player)
+						    			if (this instanceof PlayerOld)
 					    				{
-						    				((Player) this).setxSVel(0);
-					    					((Player) this).setySVel(0);
+						    				((PlayerOld) this).setxSVel(0);
+					    					((PlayerOld) this).setySVel(0);
 					    				}
 						    			System.out.println("Was going y and couldn't adjust");
 					    			}

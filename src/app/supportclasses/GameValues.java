@@ -1,5 +1,6 @@
 package app.supportclasses;
 
+import java.awt.geom.Point2D;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Font;
@@ -47,6 +48,7 @@ public class GameValues {
 
     public final String NAME = "Battle Arena - Sean McNamee";
     public final Font gameFont = getFont();
+    public double fontSize = 0;
 
     public GameState gameState = GameState.NOTSTARTED;
     public DisplayScreen currentScreen;
@@ -60,89 +62,50 @@ public class GameValues {
     public final double START_BUTTON_X = .5;
 
     /////Game Values
-    //GameField
-    public final String GAME_BACKGROUND_FILE = "res//background.png";
-    public final String STARTING_DIRECTIONS_FILE = "res//directions.png";
-    public final double DIRECTIONS_WIDTH = .8;
-    public final double DIRECTIONS_HEIGHT = .35;
-    public final double DIRECTIONS_X_PERCENT_LOCATION = .5;
-    public final double DIRECTIONS_Y_PERCENT_LOCATION = .35;
-    public final String GAME_WALL_SPRITESHEET = "res//Walls.png";
-    public final int WALL_SPRITESHEET_SIZE = 700;
-    public final String DEGRADABLES_SPRITE_SHEET = "res//DegradablesSpriteSheet.png";
-    public final int DEGRADABLES_SPRITE_SHEET_BOX_SIZE = 41;
-    public final String DOOR_SPRITE_SHEET = "res//doorSpriteSheet.png";
-    public final int DOOR_SPRITE_SHEET_BOX_SIZE = 185;
-    public final Point MAPSIZE = new Point(7, 5);
-    public double fontSize = 0;
+    
+    //GameField Sizing
+    public final Point MAPSIZE = new Point(50, 50);
+    public final int FIELD_X_SPACES = 20;
+    public final int FIELD_Y_SPACES = HEIGHT_SCALE_1*FIELD_X_SPACES/WIDTH_SCALE_1;  
+    public final int WALL_THICKNESS = 1;
 
-    public final int FIELD_X_SPACES = 13;
-    public final int FIELD_Y_SPACES = 7;
-    public final double WALL_THICKNESS = 1;
     public double fieldXStart = 0;//For entire field display
     public double fieldYStart = 0;
     public double fieldXSize = 0;
     public double fieldYSize = 0;
-    public double fieldXZero = 0;//For in game location representation //TODO allow change for screen scrolling (large room)
-    public double fieldYZero = 0;
+    public double fieldXZeroOffset = 0;//For in game location representation //TODO allow change for screen scrolling (large room)
+    public double fieldYZeroOffset = 0;
     public double singleSquareX = 0;
     public double singleSquareY = 0;
 
-    //Pixel heights
-    private final int DOOR_HEIGHT_REGULAR = 86;
-    private final int DOOR_HEIGHT_BOSS_CLOSED = 126;
-    private final int DOOR_HEIGHT_BOSS_OPEN = 185;
-    private final int DOOR_HEIGHT_BOSS_ABOVE = DOOR_HEIGHT_BOSS_CLOSED-DOOR_HEIGHT_REGULAR;
-    private final int DOOR_HEIGHT_BOSS_BELOW = DOOR_HEIGHT_BOSS_OPEN-DOOR_HEIGHT_BOSS_CLOSED;
-    private final int DOOR_HEIGHT_TREASURE = 91;
-    private final int DOOR_HEIGHT_SECRET = 121;
-    private final int DOOR_HEIGHT_ARCADE = 108;
+    //SpriteSheet Info
+    public final String SPRITE_SHEET = "res//sprite_sheet.png";
+    public final int SINGLE_BOX_SIZE = 8;
 
+    public final Point SS_INNER_TILE_LOCATION = new Point(0, 0);
+    public final Point SS_OUTTER_TILE_LOCATION = new Point(2, 0);
+    public final Point SS_TILE_SIZE = new Point(1, 1);
 
-    
-    //GameBar
-    public final String GENERAL_GAMEBAR_SPRITE_SHEET = "res//GeneralGameBarSpriteSheet.png";
-    public final int GENERAL_GAMEBAR_SPRITE_SHEET_BOX_SIZE = 64;
-    public final String ICON_SPRITE_SHEET = "res//RoomIconSpriteSheet.png";
-    public final int ICON_SPRITE_SHEET_BOX_SIZE = 69;
-    public final double GAME_BAR_HEIGHT = .15;
-    public final double GAME_BAR_WIDTH = 1;
-    public double barXStart = 0;
-    public double barYStart = 0;
-    public double barXSize = 0;
-    public double barYSize = 0;
-    public final double MINIMAP_X_SIZE = .4;
-    public final double MINIMAP_Y_SIZE = 1;
-    public final double PLAYERSTATS_X_SIZE = 1-MINIMAP_X_SIZE;
-    public final double PLAYERSTATS_Y_SIZE = 1;
+    public final Point SS_PLAYER_LOCATION = new Point(0, 1);
+    public final Point SS_PLAYER_SIZE = new Point(2, 2);
+
+    //Object Sizing
+    public final Point2D.Double INGAME_TILE_SIZE = new Point2D.Double(1, 1);
     
 
-    
     //Player
-    public final String ISSAC_FILE = "res//isaac_spritesheet.png";
-    public final int PLAYER_SHEET_BOX_SIZE = 64;
-    public final double HEAD_LEG_PERCENT_OVERLAPPING = .17;
-    private final double tempHeadYPercent = .65;
-    private final double tempLegsYPercent = 1-tempHeadYPercent;
-    public final double HEAD_Y_SIZE_PERCENT = tempHeadYPercent + HEAD_LEG_PERCENT_OVERLAPPING/2.0;
-    public final double LEGS_Y_SIZE_PERCENT = tempLegsYPercent + HEAD_LEG_PERCENT_OVERLAPPING/2.0;
-    public final double HEAD_X_SIZE_PERCENT = 1;
-    public final double LEGS_X_SIZE_PERCENT = .6;
-
+    public final Point2D.Double PLAYER_SIZE = new Point2D.Double(1.0, 1.0);
     public final int MAX_POSSIBLE_PLAYER_HEALTH = 24; //Should be divisible by 4 (2 to make it full hearts, 2 more for equal rows for display)
+    public final double ACCELERATION_RATE = 10.0;
+    public final double MAX_SPEED = 6.0;
+    public final double RUN_FACTOR = 1.4;
 
-    public final double HEAD_Y_OFFSET_PERCENT = -(1-HEAD_Y_SIZE_PERCENT)/2.0;
-    public final double LEGS_Y_OFFSET_PERCENT = (1-LEGS_Y_SIZE_PERCENT)/2.0;
-    public final double HEAD_X_OFFSET_PERCENT = 0;
-    public final double LEGS_X_OFFSET_PERCENT = 0;
-
+    //User inputs
     public int moveUpKey = KeyEvent.VK_W;
     public int moveDownKey = KeyEvent.VK_S;
     public int moveLeftKey = KeyEvent.VK_A;
     public int moveRightKey = KeyEvent.VK_D;
-
-
-    public final double DEGRADABLE_Y_HITBOX = .5;
+    public int runKey = KeyEvent.VK_SHIFT;
 
     //Animation
     public final int TICKS_PER_PICTURE_STEP = 3;
@@ -152,7 +115,5 @@ public class GameValues {
     public final double iceAccelerationChange = 1.0/6.0;
     public final double sludgeAccelerationChange = 1.0/3.0;
     
-    
-
 
 }

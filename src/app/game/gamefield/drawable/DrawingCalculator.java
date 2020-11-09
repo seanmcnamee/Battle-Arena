@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 public class DrawingCalculator {
 
     public static int findPixelLocation(double location, double size, double zeroLocation, double singleBlockSize) {
-        return (int)( zeroLocation+((location-(size/2.0))*singleBlockSize) );
+        return (int)( (-zeroLocation+location-(size/2.0))*singleBlockSize) ;
     }
 
     public static int findPixelSize(double size, double singleBlockSize) {

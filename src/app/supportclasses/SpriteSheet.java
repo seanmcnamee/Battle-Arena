@@ -1,6 +1,7 @@
 package app.supportclasses;
 
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 
 /**
  * SpriteSheet, deals with all the pictures for the game
@@ -18,6 +19,10 @@ public class SpriteSheet {
 
     public void loadSpriteSheet(String path) {
         imageLoader = new BufferedImageLoader(path);
+    }
+
+    public BufferedImage grabImage(Point location, Point dimensions, int size) {
+        return grabImage(location.x, location.y, dimensions.x, dimensions.y, size);
     }
 
     /**
