@@ -29,7 +29,7 @@ public class Player extends Movable {
 
     private void setSizings() {
         SpriteSheet ss = new SpriteSheet(gameValues.SPRITE_SHEET);
-        this.image = ss.shrink(ss.grabImage(gameValues.SS_PLAYER_LOCATION, gameValues.SS_PLAYER_SIZE, gameValues.SINGLE_BOX_SIZE));
+        this.image = ss.grabImage(gameValues.SS_PLAYER_LOCATION, gameValues.SS_PLAYER_SIZE, gameValues.SINGLE_BOX_SIZE);
         this.hitbox = new HitBox();
         this.sizeInBlocks = gameValues.PLAYER_SIZE;
     }
