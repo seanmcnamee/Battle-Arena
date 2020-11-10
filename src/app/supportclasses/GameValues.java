@@ -102,6 +102,8 @@ public class GameValues {
     public final double MAX_SPEED = 10.0;
     public final double RUN_FACTOR = 1.4;
 
+    public final double MAX_PROJECTILE_SPEED = 5;
+
     //User inputs
     public int moveUpKey = KeyEvent.VK_W;
     public int moveDownKey = KeyEvent.VK_S;
@@ -116,8 +118,11 @@ public class GameValues {
     public double friction = 6.0; //In blocks per second
     public final double iceAccelerationChange = 1.0/6.0;
     public final double sludgeAccelerationChange = 1.0/3.0;
+    public final double projectileFriction = 1.0/5.0;
     
 
     //MiniMap
+    public final double MINIMAP_SIZE = 1.0 / 8.0;
+    public final Color MINIMAP_COLOR = new Color(0, 0, 0, 100);
     public final Color PLAYER_COLOR = Color.GREEN;
 }

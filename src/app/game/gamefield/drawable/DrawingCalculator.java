@@ -11,6 +11,10 @@ public class DrawingCalculator {
         return (int)( (-zeroLocation+location-(size/2.0))*singleBlockSize) ;
     }
 
+    public static double estimateLocationFromPixel(double pixelLocation, double zeroLocation, double singleBlockSize) {
+        return pixelLocation/singleBlockSize + zeroLocation;
+    }
+
     public static int findPixelSize(double size, double singleBlockSize) {
         return (int)( size*singleBlockSize );
     }

@@ -44,11 +44,6 @@ public class Drawable  {
                                 null);
     }
 
-
-    protected Point2D.Double getLocation() {
-        return location;
-    }
-
     protected Point2D.Double getSizeInBlocks() {
         return sizeInBlocks;
     }
@@ -61,6 +56,10 @@ public class Drawable  {
         if (gameValues.debugMode) {
             System.out.println(toPrint);
         }
+    }
+
+    public Point2D.Double getLocation() {
+        return (Point2D.Double) this.location.clone();
     }
 
 }

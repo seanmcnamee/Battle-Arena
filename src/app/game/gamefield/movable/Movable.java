@@ -1,5 +1,6 @@
 package app.game.gamefield.movable;
 
+import java.awt.image.BufferedImage;
 import java.awt.geom.Point2D;
 import java.awt.Point;
 import java.awt.Color;
@@ -12,12 +13,21 @@ public class Movable extends Touchable {
     protected Point2D.Double percentVelocity;
     protected Point percentAcceleration;
 	protected double accelerationRate;
-	protected double maxSpeed;
+    protected double maxSpeed;
+    protected double friction;
+
+    public Movable(GameValues gameValues, Point2D.Double location, Point2D.Double startingVelocity, BufferedImage image, Point2D.Double sizeinBlocks) {
+        super(gameValues, location, image, sizeinBlocks);
+        this.percentVelocity = startingVelocity;
+        this.percentAcceleration = new Point();
+        this.friction = gameValues.friction;
+    }
 
     public Movable(GameValues gameValues, Point2D.Double location, Color c) {
         super(gameValues, location, c);
-        percentVelocity = new Point2D.Double();
-        percentAcceleration = new Point();
+        this.percentVelocity = new Point2D.Double();
+        this.percentAcceleration = new Point();
+        this.friction = gameValues.friction;
     }
 
     public void accelerate(boolean up, boolean down, boolean left, boolean right) {
@@ -36,7 +46,7 @@ public class Movable extends Touchable {
     public void updateVelocity() {
         //Converts from blocks/second to blocks/tick
         final double acceleration = accelerationRate/gameValues.goalTicksPerSecond;
-        final double friction = gameValues.friction/gameValues.goalTicksPerSecond;
+        final double friction = this.friction/gameValues.goalTicksPerSecond;
         final double changeWhenFull = .1;
 
         Point2D.Double tempPercentVelocity = (Point2D.Double) this.percentVelocity.clone();
@@ -82,7 +92,7 @@ public class Movable extends Touchable {
         return new Point2D.Double(this.location.x + maxSpeedPerTick()*this.percentVelocity.x, this.location.y + maxSpeedPerTick()*this.percentVelocity.y);
     }
 
-    public void updateLocation() {
+    public void updateLocation(Map m) {
         this.location = calculateNextLocation();
     }
 

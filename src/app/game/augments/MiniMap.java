@@ -4,38 +4,45 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import app.game.gamefield.map.Map;
+import app.game.gamefield.touchable.Touchable;
+import app.supportclasses.GameValues;
 
 
 public class MiniMap {
-	private double sizeRatio = 1.0 / 8.0;
+	
+	private GameValues gameValues;
 	private Map map;
 
-	public MiniMap(Map m) {
+	public MiniMap(GameValues gameValues, Map m) {
+		this.gameValues = gameValues;
 		map = m;
 	}
 	
-	/*
-	public void render(Graphics g, Entity e) {
+	
+	public void render(Graphics g) {
 		// Print out the entire map
 		double xStart, yStart;
 		double size;
-		//double tilesToRender;
 
-		size = Math.min(Game.WIDTH, Game.HEIGHT) * sizeRatio;
-		xStart = Game.WIDTH - size - 7;
-		yStart = Game.HEIGHT - size - 12;
-
-		// System.out.println(Game.WIDTH + ", " + Game.HEIGHT);
-		// System.out.println("FillRect: " + xStart + ", " + yStart + ", " + xSize + ",
-		// " + ySize);
-		// g.fillRect(10, 10, 100, 100);
+		//Since fieldSize accounts for Scaling, multiplying by gameScale is unneeded.
+		size = Math.min(gameValues.fieldXSize, gameValues.fieldYSize) * gameValues.MINIMAP_SIZE;
+		xStart = gameValues.fieldXSize - size*1.1;
+		yStart = gameValues.fieldYSize - size*1.1;
 
 		// Background of Minimap
-		g.setColor(new Color(0, 0, 0, 100));
-		g.fillRect((int) (xStart * Game.SCALE), (int) (yStart * Game.SCALE), (int) (size * Game.SCALE),
-				(int) (size * Game.SCALE));
+		g.setColor(gameValues.MINIMAP_COLOR);
+		g.fillRect((int) (xStart), (int) (yStart), (int) (size),
+				(int) (size));
 
 
+		for (Touchable t : map.getTouchables()) {
+			if (t.isDisplaying()) {
+				g.setColor(t.getColor());
+				g.fillRect((int)(xStart + size*(t.getLocation().x/map.getMapSize().x)), 
+							(int)(yStart + size*(t.getLocation().y/map.getMapSize().y)), 1, 1);
+			}
+		}
+				/*
 		//Either print all entities, or focus on certain entities
 		for (int i = 0; i < map.getEntities().size(); i++) {
 			if (e == null) //Print out everything (with different colors)
@@ -69,24 +76,7 @@ public class MiniMap {
 				}
 			}
 		}
+		*/
 
 	}
-*/
-
-	/**
-	 * @return A fraction representing how much of the screen the minimap takes up
-	 */
-	public double getSizeRatio() {
-		return sizeRatio;
-	}
-
-	/**
-	 * The bigger the number, the smaller the minimap will be
-	 * 
-	 * @param sizeRatio - size multiplier
-	 */
-	public void setSizeRatio(double sizeRatio) {
-		this.sizeRatio = 1.0 / sizeRatio;
-	}
-
 }

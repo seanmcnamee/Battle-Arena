@@ -2,6 +2,7 @@ package app.game;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.Color;
 
@@ -20,7 +21,7 @@ public class GameField {
         this.gameValues = gameValues;
         this.player = player;
         this.gameMap = new Map(gameValues);
-        this.miniMap = new MiniMap(this.gameMap);
+        this.miniMap = new MiniMap(this.gameValues, this.gameMap);
         gameMap.addMovable(player);
     }
 
@@ -37,7 +38,8 @@ public class GameField {
         //this.gameValues.fieldXZero = gameValues.fieldXStart+(gameValues.singleSquareX*(gameValues.WALL_THICKNESS+halfABlock));
         //this.gameValues.fieldYZero = gameValues.fieldYStart+(gameValues.singleSquareY*(gameValues.WALL_THICKNESS+halfABlock));
 		
-        gameMap.render(g);
+		gameMap.render(g);
+		miniMap.render(g);
 
 		g.setColor(Color.GRAY);
         //g.fillRect(100, 10, 500, 500);
@@ -60,6 +62,10 @@ public class GameField {
                 
     }
 
+	public void mouseClicked(MouseEvent e){
+        player.mouseClicked(e, gameMap);
+	}
+	
 	public void mouseWheelMoved(MouseWheelEvent e) {
 	}
 

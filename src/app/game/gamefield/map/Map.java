@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.geom.Point2D;
+import java.awt.Point;
 
 import app.supportclasses.GameValues;
 import app.supportclasses.SpriteSheet;
@@ -79,15 +80,17 @@ public class Map {
     }
 
     public void tick() {
-        for (Movable m : this.movables) {
+        for (int i = 0; i < movables.size(); i++) {
+            Movable m = movables.get(i);
+            if (m == null) continue;
+
             m.updateVelocity();
             Point2D.Double nextLocation = m.getNextLocation();
             Touchable collidingTouchable = collisionWith(m, nextLocation);
             if (collidingTouchable != null) {
-                System.out.println("Collision");
                 m.updateFromCollision(collidingTouchable, this);
             } else {
-                m.updateLocation();
+                m.updateLocation(this);
             }
         }
     }
@@ -136,5 +139,13 @@ public class Map {
 
     public void removeDrawable(Drawable d) {
         this.drawables.remove(d);
+    }
+
+    public ArrayList<Touchable> getTouchables() {
+        return this.touchables;
+    }
+
+    public Point getMapSize() {
+        return new Point(map.length, map[0].length);
     }
 }

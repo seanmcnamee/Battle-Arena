@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import app.game.augments.MiniMapable;
 import app.game.gamefield.drawable.Drawable;
 import app.game.gamefield.drawable.DrawingCalculator;
+import app.game.gamefield.movable.Movable;
 import app.supportclasses.Collisions;
 import app.supportclasses.GameValues;
 
@@ -26,7 +27,6 @@ public class Touchable extends Drawable implements MiniMapable {
         this.image = image;
         this.shouldMap = false;
         this.hitbox = new HitBox();
-        
     }
 
     public Touchable(GameValues gameValues, double xPos, double yPos, Color color) {
@@ -132,5 +132,9 @@ public class Touchable extends Drawable implements MiniMapable {
     @Override
     public boolean isDisplaying() {
         return this.shouldMap;
+    }
+
+    public void gotHit(Movable m) {
+
     }
 }
