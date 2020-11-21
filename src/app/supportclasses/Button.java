@@ -89,7 +89,7 @@ public class Button {
             if (b) {
                 //Make image darker
                 if (this.image != null) {
-                    RescaleOp op = new RescaleOp(gameValues.DARKEN_VALUE, 0, null);
+                    RescaleOp op = new RescaleOp(1, gameValues.LIGHTEN_DARKEN_AMOUNT, null);
                     image = op.filter(image, null);
                 } else {
                     this.color = Color.DARK_GRAY;
@@ -98,7 +98,7 @@ public class Button {
             }   else {
                 //Make image brighter
                 if (this.image != null) {
-                    RescaleOp op = new RescaleOp(gameValues.LIGHTEN_VALUE, 0, null);
+                    RescaleOp op = new RescaleOp(1, -gameValues.LIGHTEN_DARKEN_AMOUNT, null);
                     image = op.filter(image, null);
                 } else {
                     this.color = Color.GRAY;

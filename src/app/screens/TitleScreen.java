@@ -1,6 +1,8 @@
 package app.screens;
 
 import java.awt.Graphics;
+import java.awt.Point;
+
 import javax.swing.JFrame;
 
 import java.awt.Color;
@@ -23,16 +25,19 @@ import java.awt.event.MouseEvent;
 public class TitleScreen extends DisplayScreen {
 
     //private final BufferedImageLoader background;
-    private Button btnStart;
+    private Button btnStart, btnHighScores;
+    private BufferedImageLoader background;
     private GameValues gameValues;
     private DisplayScreen game;
 
     public TitleScreen(JFrame frame, GameValues gameValues, Input gameInputs, DisplayScreen game) {
         super(frame);
-        //background = new BufferedImageLoader(gameValues.MAIN_MENU_FILE);
-        //SpriteSheet buttons = new SpriteSheet(gameValues.MAIN_MENU_BUTTONS);
+        background = new BufferedImageLoader(gameValues.MAIN_MENU_FILE);
+        BufferedImageLoader playImg = new BufferedImageLoader(gameValues.PLAY_BUTTON_FILE);
+        BufferedImageLoader highscoresImg = new BufferedImageLoader(gameValues.HIGH_SCORES_BUTTON_FILE);
         
-        btnStart = new Button(.5, .5, (int)(gameValues.START_BUTTON_X*gameValues.WIDTH_SCALE_1), (int)(gameValues.START_BUTTON_Y*gameValues.HEIGHT_SCALE_1), Color.GRAY, gameValues);
+        btnStart = new Button(playImg.getImage(), new Point((int)(gameValues.PLAY_BUTTON_LOCATION.x*gameValues.WIDTH_SCALE_1*gameValues.gameScale), (int)(gameValues.PLAY_BUTTON_LOCATION.y*gameValues.HEIGHT_SCALE_1*gameValues.gameScale)), gameValues);
+        btnHighScores = new Button(highscoresImg.getImage(), new Point((int)(gameValues.HIGH_SCORES_BUTTON_LOCATION.x*gameValues.WIDTH_SCALE_1*gameValues.gameScale), (int)(gameValues.HIGH_SCORES_BUTTON_LOCATION.y*gameValues.HEIGHT_SCALE_1*gameValues.gameScale)), gameValues);
 
         
         this.gameValues = gameValues;
@@ -58,9 +63,12 @@ public class TitleScreen extends DisplayScreen {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, (int)(gameValues.WIDTH_SCALE_1*gameValues.gameScale), (int)(gameValues.HEIGHT_SCALE_1*gameValues.gameScale));
+
+        g.drawImage(background.getImage(), 0, 0, (int)(gameValues.WIDTH_SCALE_1*gameValues.gameScale), (int)(gameValues.HEIGHT_SCALE_1*gameValues.gameScale), null);
+        //g.setColor(Color.BLACK);
+        //g.drawRect(0, 0, (int)(gameValues.WIDTH_SCALE_1*gameValues.gameScale), (int)(gameValues.HEIGHT_SCALE_1*gameValues.gameScale));
         btnStart.render(g);
+        btnHighScores.render(g);
 
         //g.setFont(font);
         //g.drawString("START", mainGUI.getContentPane().getWidth()/2 - 60, (int)(mainGUI.getContentPane().getHeight()*.75));
@@ -69,6 +77,8 @@ public class TitleScreen extends DisplayScreen {
     public void mouseClicked(MouseEvent e){
         if (btnStart.contains(e.getPoint())) {
             startGame();
+        } else if (btnHighScores.contains(e.getPoint())) {
+            System.out.println("High scores lol");
         }
         System.out.println("Mouse clicked at: " +e.getPoint());
         
@@ -81,7 +91,11 @@ public class TitleScreen extends DisplayScreen {
             btnStart.setHovering(true);
         }   else if (btnStart.isHovering() && !btnStart.contains(e.getPoint())) {
             btnStart.setHovering(false);
-        //btnCredits
+        //btnHighScores
+        } else if (!btnHighScores.isHovering() && btnHighScores.contains(e.getPoint())) {
+            btnHighScores.setHovering(true);
+        }   else if (btnHighScores.isHovering() && !btnHighScores.contains(e.getPoint())) {
+            btnHighScores.setHovering(false);
         }
     }
 

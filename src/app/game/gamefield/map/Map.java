@@ -49,7 +49,19 @@ public class Map {
 					map[x][y] = new Drawable(gameValues, xPos, yPos, insideImg, gameValues.INGAME_TILE_SIZE);
 				}
 			}
-		}
+        }
+        generateStructures(new Structure(gameValues, this, ss.grabImage(gameValues.SS_WALL_TILE_LOCATION, gameValues.SS_TILE_SIZE, gameValues.SINGLE_BOX_SIZE)));
+    }
+
+    private void generateStructures(Structure s) {
+        s.generate(Structure.Type.SMALL_2DOOR_HOUSE, new Point(2, 2));
+        s.generate(Structure.Type.SMALL_2DOOR_HOUSE, new Point(34, 2));
+        s.generate(Structure.Type.SMALL_2DOOR_HOUSE, new Point(41, 12));
+        s.generate(Structure.Type.SMALL_2DOOR_HOUSE, new Point(40, 26));
+        s.generate(Structure.Type.LARGE_2DOOR_HOUSE, new Point(35, 37));
+        s.generate(Structure.Type.LARGE_4DOOR_HOUSE, new Point(20, 10));
+        s.generate(Structure.Type.LARGE_2DOOR_HOUSE, new Point(5, 30));
+
     }
 
     public void render(Graphics g) {
@@ -74,7 +86,10 @@ public class Map {
     }
 
     private void renderDrawables(Graphics g) {
-        for (Drawable d : drawables) {
+        for (int i = 0; i < drawables.size(); i++) {
+            Drawable d = drawables.get(i);
+            if (d == null) continue;
+
             d.render(g);
         }
     }
@@ -102,7 +117,10 @@ public class Map {
      * @return The touchable it collides with, or null
      */
     public Touchable collisionWith(Movable m, Point2D.Double testLocation) {
-        for (Touchable touchable : this.touchables) {
+        for (int i = 0; i < touchables.size(); i++) {
+            Touchable touchable = touchables.get(i);
+            if (touchable == null) continue;
+
             if (!m.equals(touchable) && m.contains(testLocation, touchable)) {
                 return touchable;
             }
@@ -147,5 +165,9 @@ public class Map {
 
     public Point getMapSize() {
         return new Point(map.length, map[0].length);
+    }
+
+    public boolean doesDrawableExist(Drawable d) {
+        return this.drawables.contains(d);
     }
 }

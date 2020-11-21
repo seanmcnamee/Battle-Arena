@@ -1,14 +1,12 @@
 package app.game.gamefield.movable.player;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import app.game.gamefield.drawable.DrawingCalculator;
+
 import app.game.gamefield.map.Map;
 import app.game.gamefield.movable.Movable;
-import app.game.gamefield.movable.projectile.Projectile;
 import app.supportclasses.GameValues;
 import app.supportclasses.SpriteSheet;
 import app.game.gamefield.touchable.HitBox;
@@ -16,14 +14,17 @@ import app.game.gamefield.touchable.Touchable;
 
 public class Player extends Movable {
     private boolean moveUp, moveDown, moveLeft, moveRight;
+    private int health = 3;
     private boolean isRunning;
-    private ArrayList<Projectile> bullets;
+    private ProjectileHandler projectiles;
+    private StateHandler currentState;
 
     public Player(GameValues gameValues, Point2D.Double location) {
         super(gameValues, location, gameValues.PLAYER_COLOR);
-        this.bullets = new ArrayList<Projectile>();
         setStats();
         setSizings();
+        this.projectiles = new ProjectileHandler(gameValues, gameValues.PLAYER_PROJECTILE_MAX);
+        this.currentState = new StateHandler(projectiles, gameValues.PROJECTILE_RECHARGE_TIME);
         System.out.println(this.location.toString());
     }
 
@@ -75,27 +76,12 @@ public class Player extends Movable {
         accelerate(moveUp, moveDown, moveLeft, moveRight);
     }
 
-    public void mouseClicked(MouseEvent e, Map gameMap){
-        System.out.println(this.bullets.size());
-        double mouseX = DrawingCalculator.estimateLocationFromPixel(e.getX(), gameValues.fieldXZeroOffset, gameValues.singleSquareX);
-        double mouseY = DrawingCalculator.estimateLocationFromPixel(e.getY(), gameValues.fieldYZeroOffset, gameValues.singleSquareY);
-        
-        double dY = (mouseY - location.y) + percentVelocity.y * maxSpeed;
-        double dX = (mouseX - location.x) + percentVelocity.x * maxSpeed;
-        double theta = Math.atan(dY/dX);
-
-        double xVel = Math.signum(dX) * Math.cos(theta);
-        double yVel = ((dX<0)? -1:1) * Math.sin(theta);
-        Point2D.Double projectileVelocity = new Point2D.Double(xVel, yVel);
-
-        double resultantVelocity = Math.sqrt(Math.pow(percentVelocity.x, 2) + Math.pow(percentVelocity.y, 2));
-        double projectileMaxSpeed = resultantVelocity*maxSpeed+gameValues.MAX_PROJECTILE_SPEED;
-
-        Projectile ball = new Projectile(this, gameValues, location, projectileVelocity, projectileMaxSpeed, image);
-
-        this.bullets.add(ball);
-        gameMap.addMovable(ball);
-	}
+    public void mousePressed(MouseEvent e, Map gameMap){
+        if (projectiles.canShoot()) {
+            this.currentState.setFighting();
+            gameMap.addMovable(projectiles.createAndReturnProjectile(e, this, location, percentVelocity, maxSpeed));
+        }
+    }
 
     @Override
     public void updateLocation(Map m) {
@@ -103,17 +89,28 @@ public class Player extends Movable {
         double previousY = this.location.y;
         super.updateLocation(m);
         updateScreenPosition(this.location.x - previousX, this.location.y - previousY);
+        updateState(this.location.x - previousX, this.location.y - previousY);
+        projectiles.checkRemoveLongestLivingProjectile(m);
     }
 
     @Override
     public void updateFromCollision(Touchable t, Map m) {
-        if (this.bullets.contains(t)) {
+        if (this.projectiles.contains(t)) {
             updateLocation(m);
         } else {
             double previousX = this.location.x;
             double previousY = this.location.y;
             super.updateFromCollision(t, m);
             updateScreenPosition(this.location.x - previousX, this.location.y - previousY);
+            updateState(this.location.x - previousX, this.location.y - previousY);
+        }
+    }
+
+    private void updateState(double xChange, double yChange) {
+        if (xChange != 0 || yChange != 0) {
+            currentState.setFighting();
+        } else {
+            currentState.setRecharging();
         }
     }
 
@@ -122,6 +119,25 @@ public class Player extends Movable {
         
         //gameValues.fieldXZeroOffset += xChange;
         //gameValues.fieldYZeroOffset += yChange;
+    }
+
+    @Override
+    public void gotHit(Movable m) {
+        health -= 1;
+        if (isDestroyed()) {
+            this.currentState.setDead();
+            this.gameValues.gameState = GameValues.GameState.LOST;
+        }
+        //TODO add check for enemies only
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return health <= 0;
+    }
+
+    public ProjectileHandler getProjectiles() {
+        return projectiles;
     }
 
     /*

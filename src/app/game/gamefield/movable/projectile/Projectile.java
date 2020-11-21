@@ -13,7 +13,7 @@ public class Projectile extends Movable {
     private Touchable owner;
 
     public Projectile(Touchable owner, GameValues gameValues, Point2D.Double location, Point2D.Double velocity, double maxSpeed, BufferedImage image) {
-        super(gameValues, location, velocity, image, new Point2D.Double(.5, .5));
+        super(gameValues, location, velocity, image, gameValues.PROJECTILE_SIZE);
         this.owner = owner;
         this.friction = gameValues.projectileFriction;
         this.maxSpeed = maxSpeed;
@@ -36,8 +36,12 @@ public class Projectile extends Movable {
     @Override
     public void updateLocation(Map m) {
         super.updateLocation(m);
-        if (this.percentVelocity.x == 0 && this.percentVelocity.y == 0) {
+        if (isStopped()) {
             m.removeMovable(this);
         }
     }
+
+    public boolean isStopped() {
+        return this.percentVelocity.x == 0 && this.percentVelocity.y == 0;
+    }   
 }

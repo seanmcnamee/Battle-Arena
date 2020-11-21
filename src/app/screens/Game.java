@@ -53,8 +53,8 @@ public class Game extends DisplayScreen{
         gameField.render(g);
     }
 
-    public void mouseClicked(MouseEvent e){
-        gameField.mouseClicked(e);
+    public void mousePressed(MouseEvent e){
+        gameField.mousePressed(e);
     }
 
     public void mouseWheelMoved(MouseWheelEvent e) {

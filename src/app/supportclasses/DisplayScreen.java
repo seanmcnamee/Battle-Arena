@@ -31,6 +31,10 @@ public abstract class DisplayScreen {
         //System.out.println(e.getKeyChar() + " Key Typed");
     }
 
+    public void mousePressed(MouseEvent e){
+        //System.out.println("Mouse Clicked");
+    }
+
     public void mouseClicked(MouseEvent e){
         //System.out.println("Mouse Clicked");
     }

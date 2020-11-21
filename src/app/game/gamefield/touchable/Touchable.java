@@ -12,7 +12,7 @@ import app.game.gamefield.movable.Movable;
 import app.supportclasses.Collisions;
 import app.supportclasses.GameValues;
 
-public class Touchable extends Drawable implements MiniMapable {
+public class Touchable extends Drawable implements MiniMapable, Destroyable {
     protected HitBox hitbox;
     protected boolean shouldMap;
     protected Color colorToMap;
@@ -134,7 +134,13 @@ public class Touchable extends Drawable implements MiniMapable {
         return this.shouldMap;
     }
 
+    @Override
     public void gotHit(Movable m) {
 
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return false;
     }
 }

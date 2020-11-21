@@ -29,6 +29,10 @@ public class Input extends MouseInputAdapter implements KeyListener, ComponentLi
         this.frame = frame;
     }
 
+    public void mousePressed(MouseEvent e) {
+        gameValues.currentScreen.mousePressed(e);
+    }
+
     public void mouseClicked(MouseEvent e) {
         gameValues.currentScreen.mouseClicked(e);
     }

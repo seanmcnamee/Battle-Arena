@@ -1,6 +1,5 @@
 package app.game.augments;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import app.game.gamefield.map.Map;
@@ -19,23 +18,17 @@ public class MiniMap {
 	}
 	
 	
-	public void render(Graphics g) {
+	public void render(Graphics g, double xStart, double yStart, double size) {
 		// Print out the entire map
-		double xStart, yStart;
-		double size;
-
-		//Since fieldSize accounts for Scaling, multiplying by gameScale is unneeded.
-		size = Math.min(gameValues.fieldXSize, gameValues.fieldYSize) * gameValues.MINIMAP_SIZE;
-		xStart = gameValues.fieldXSize - size*1.1;
-		yStart = gameValues.fieldYSize - size*1.1;
 
 		// Background of Minimap
 		g.setColor(gameValues.MINIMAP_COLOR);
 		g.fillRect((int) (xStart), (int) (yStart), (int) (size),
 				(int) (size));
 
-
-		for (Touchable t : map.getTouchables()) {
+		//Minmapable elements
+		for (int i = 0; i < map.getTouchables().size(); i++) {
+			Touchable t = map.getTouchables().get(i);
 			if (t.isDisplaying()) {
 				g.setColor(t.getColor());
 				g.fillRect((int)(xStart + size*(t.getLocation().x/map.getMapSize().x)), 
