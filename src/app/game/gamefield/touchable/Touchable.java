@@ -97,17 +97,6 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
                 && // Right side of other
                 Collisions.leftHandSideTest(otherRightMost, otherTopMost, otherLeftMost, otherTopMost, center.getX(),
                         bottomMost); // Top side of other
-
-        /*
-         * return Button.leftHandSideTest(leftMost, topMost, leftMost, bottomMost,
-         * other.location.getX(), other.location.getY()) && //Left side of this
-         * Button.leftHandSideTest(leftMost, bottomMost, rightMost, bottomMost,
-         * other.location.getX(), other.location.getY()) && //Bottom of this
-         * Button.leftHandSideTest(rightMost, bottomMost, rightMost, topMost,
-         * other.location.getX(), other.location.getX()) && //Right side of this
-         * Button.leftHandSideTest(rightMost, topMost, leftMost, topMost,
-         * other.location.getX(), other.location.getY()); //Top side of this
-         */
     }
 
     public void setHitBox(HitBox hitbox) {
@@ -138,7 +127,6 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
 
     @Override
     public void gotHit(Touchable m, Map map) {
-        lowerHealth();
         if (isDestroyed()) {
             map.removeTouchable(this);
         }

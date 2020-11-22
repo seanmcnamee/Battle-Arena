@@ -151,8 +151,9 @@ public class App extends Canvas implements Runnable {
             
             //Once a second, show the fps and tps of application loop
             long currentMillis = System.currentTimeMillis();
-            if (currentMillis - previousMillis >= gameValues.ONE_SEC_IN_MILLIS) {
-                System.out.println("FPS: " + gameValues.framesPerSecond + ", TPS: " + gameValues.ticksPerSeconds +
+            double secondsBetween = 5.0;
+            if (currentMillis - previousMillis >= secondsBetween*gameValues.ONE_SEC_IN_MILLIS) {
+                System.out.println("FPS: " + (gameValues.framesPerSecond/secondsBetween) + ", TPS: " + (gameValues.ticksPerSeconds/secondsBetween) +
                     ((gameValues.debugMode)? ", ScreenScale: " + gameValues.gameScale:""));
                 previousMillis = currentMillis;
                 gameValues.framesPerSecond = gameValues.ticksPerSeconds = 0;

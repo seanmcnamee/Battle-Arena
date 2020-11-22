@@ -13,20 +13,21 @@ import app.supportclasses.GameValues;
 public class Projectile extends Movable {
     private Touchable owner;
 
-    public Projectile(Touchable owner, GameValues gameValues, Point2D.Double location, Point2D.Double velocity, double maxSpeed, BufferedImage image) {
+    public Projectile(Touchable owner, GameValues gameValues, Point2D.Double location, Point2D.Double velocity,
+            double maxSpeed, BufferedImage image) {
         super(gameValues, location, velocity, image, gameValues.PROJECTILE_SIZE);
         this.owner = owner;
         this.friction = gameValues.projectileFriction;
         this.maxSpeed = maxSpeed;
     }
-    
+
     @Override
     public void updateFromCollision(Touchable t, Map m) {
-        //If you're touching the person who fired you, its okay
+        // If you're touching the person who fired you, its okay
         if (t.equals(owner)) {
             this.updateLocation(m);
         } else {
-            //Damage the touchable. The projectile lowers its health as well
+            // Damage the touchable. The projectile lowers its health as well
             t.gotHit(this, m);
             this.gotHit(t, m);
         }
@@ -60,7 +61,7 @@ public class Projectile extends Movable {
     }
 
     public void accelerate(Touchable target) {
-        //Regular Projectiles don't track.
+        // Regular Projectiles don't track.
     }
 
     private boolean isOwnersProjectile() {
