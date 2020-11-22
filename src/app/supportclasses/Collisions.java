@@ -22,4 +22,10 @@ public class Collisions {
             return false;
         }
     }
+
+    public static boolean within(Point2D.Double mainLocation, Point2D.Double otherLocation, double radius) {
+        double distX = Math.abs(mainLocation.x - otherLocation.x);
+        double distY = Math.abs(mainLocation.y - otherLocation.y);
+        return distX < radius || distY < radius;
+    }
 }

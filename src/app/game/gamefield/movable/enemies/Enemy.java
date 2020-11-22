@@ -1,42 +1,47 @@
 package app.game.gamefield.movable.enemies;
 
-import java.awt.geom.Point2D.Double;
+import java.awt.geom.Point2D;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 
+import app.game.gamefield.map.Map;
 import app.game.gamefield.movable.Movable;
+import app.game.gamefield.movable.player.Player;
+import app.game.gamefield.movable.projectile.Projectile;
 import app.game.gamefield.touchable.HitBox;
+import app.game.gamefield.touchable.Touchable;
 import app.supportclasses.GameValues;
 import app.supportclasses.SpriteSheet;
 
-public class Enemy extends Movable {
-    public enum Type {
-        Zombie
-    }
-
-    public static Color EnemyColor(Type t) {
-        switch(t) {
-            case Zombie:
-                return Color.magenta;
-            default:
-                return Color.BLACK;
-        }
-        
-    }
-
-
-    public Enemy(GameValues gameValues, Double location, BufferedImage image, Type enemyType) {
-        super(gameValues, location, EnemyColor(enemyType));
+public abstract class Enemy extends Movable {
+    public Enemy(GameValues gameValues, Point2D.Double location, Color miniMapColor) {
+        super(gameValues, location, miniMapColor);
         // TODO Auto-generated constructor stub
-        setSizings(enemyType);
-    }
-
-    private void setSizings(Type t) {
         SpriteSheet ss = new SpriteSheet(gameValues.SPRITE_SHEET);
         this.hitbox = new HitBox();
+        setImageAndSize(ss);
+        setMaxSpeedAccelRateAndFrinction();
+    }
 
-        this.image = ss.grabImage(gameValues.SS_PLAYER_LOCATION, gameValues.SS_PLAYER_SIZE, gameValues.SINGLE_BOX_SIZE);
-        this.sizeInBlocks = gameValues.PLAYER_SIZE;
+    protected abstract void setImageAndSize(SpriteSheet ss);
+    protected abstract void setMaxSpeedAccelRateAndFrinction();
+
+    public void setLocation(Point2D.Double location) {
+        this.location = location;
+    }
+
+    @Override
+    public void updateFromCollision(Touchable t, Map m) {
+        if (t.getClass().equals(Player.class)) {
+            //Damage just the player
+            t.gotHit(this, m);
+        } else if (t.getClass().equals(Projectile.class)) {
+            //Die if its a Projectile
+            t.gotHit(this, m);
+            this.gotHit(t, m);
+        } else {
+            //Otherwise regularly update
+            super.updateFromCollision(t, m);
+        }
     }
     
 }

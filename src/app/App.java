@@ -37,7 +37,7 @@ public class App extends Canvas implements Runnable {
     private Input gameInputs;
 
     //Screen specific variables
-    private DisplayScreen titleScreen, game;
+    private DisplayScreen titleScreen, game, highScores;
     
     /**
      * Creates all the main components of the Application
@@ -51,7 +51,9 @@ public class App extends Canvas implements Runnable {
         
         //Different Screens setup
         game = new Game(frame, gameValues);
-        titleScreen = new TitleScreen(frame, gameValues, gameInputs, game);
+        highScores = new HighScoresScreen(frame, gameValues);
+        titleScreen = new TitleScreen(frame, gameValues, game, highScores);
+        ((HighScoresScreen)highScores).setTitleScreen(titleScreen);
 
         //Start displaying/updating everything
         gameValues.currentScreen = titleScreen;
@@ -121,7 +123,13 @@ public class App extends Canvas implements Runnable {
         long previousMillis = System.currentTimeMillis();
 
         //Only update/render the application if its running
-        while (gameValues.gameState == GameState.RUNNING) {
+        while (gameValues.gameState == GameState.RUNNING || gameValues.gameState == GameState.LOST) {
+
+            if (gameValues.gameState == GameState.LOST) {
+                gameValues.gameState = GameState.RUNNING;
+                ((HighScoresScreen)highScores).addMostRecentScore();
+                gameValues.currentScreen = highScores;
+            }
 
             //Only worry about updating game logic when playing the game
             if (gameValues.currentScreen == game)   {
@@ -163,6 +171,14 @@ public class App extends Canvas implements Runnable {
         //Print whatever has to be to the screen (default black screen behind)
         g.setColor(Color.black);
         g.fillRect(0, 0, frame.getContentPane().getWidth(), frame.getContentPane().getHeight());
+
+        this.gameValues.fieldXSize = gameValues.WIDTH_SCALE_1*(gameValues.gameScale);
+        this.gameValues.fieldYSize = gameValues.HEIGHT_SCALE_1*(gameValues.gameScale);
+        double excessWidth = gameValues.frameWidth-(gameValues.WIDTH_SCALE_1*gameValues.gameScale);
+        double excessHeight = gameValues.frameHeight-(gameValues.HEIGHT_SCALE_1*gameValues.gameScale);
+        this.gameValues.fieldXStart = excessWidth/2.0;
+        this.gameValues.fieldYStart = excessHeight/2.0;
+
         gameValues.currentScreen.render(g);
 
         //Closes the graphics and shows the screen

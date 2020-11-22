@@ -26,7 +26,7 @@ public class GameField {
     }
 
     public void tick() {
-        gameMap.tick();
+        gameMap.tick(player);
     }
 
 

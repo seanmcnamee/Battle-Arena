@@ -31,6 +31,7 @@ public class Game extends DisplayScreen{
                         new Point2D.Double((2*gameValues.WALL_THICKNESS+gameValues.MAPSIZE.x-1)/2.0, 
                                             (2*gameValues.WALL_THICKNESS+gameValues.MAPSIZE.y-1)/2.0));
         gameField = new GameField(this.gameValues, player);
+        gameValues.score = 0;
     }
 
 
@@ -39,16 +40,10 @@ public class Game extends DisplayScreen{
     }
 
     public void render(Graphics g) {
-        this.gameValues.fieldXSize = gameValues.WIDTH_SCALE_1*(gameValues.gameScale);
-        this.gameValues.fieldYSize = gameValues.HEIGHT_SCALE_1*(gameValues.gameScale);
-
         this.gameValues.singleSquareX = (gameValues.fieldXSize)/(gameValues.FIELD_X_SPACES);
         this.gameValues.singleSquareY = (gameValues.fieldYSize)/(gameValues.FIELD_Y_SPACES);
 
-        double excessWidth = gameValues.frameWidth-(gameValues.WIDTH_SCALE_1*gameValues.gameScale);
-        double excessHeight = gameValues.frameHeight-(gameValues.HEIGHT_SCALE_1*gameValues.gameScale);
-        this.gameValues.fieldXStart = excessWidth/2.0;
-        this.gameValues.fieldYStart = excessHeight/2.0;
+        this.gameValues.fontSize = 15.1522*gameValues.gameScale - .4976;
 
         gameField.render(g);
     }

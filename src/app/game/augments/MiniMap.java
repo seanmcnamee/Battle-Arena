@@ -29,6 +29,7 @@ public class MiniMap {
 		//Minmapable elements
 		for (int i = 0; i < map.getTouchables().size(); i++) {
 			Touchable t = map.getTouchables().get(i);
+			if (t == null) continue;
 			if (t.isDisplaying()) {
 				g.setColor(t.getColor());
 				g.fillRect((int)(xStart + size*(t.getLocation().x/map.getMapSize().x)), 

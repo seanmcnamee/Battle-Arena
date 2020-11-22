@@ -9,6 +9,7 @@ import app.game.gamefield.drawable.DrawingCalculator;
 import app.game.gamefield.map.Map;
 import app.game.gamefield.movable.projectile.Projectile;
 import app.game.gamefield.touchable.Touchable;
+import app.supportclasses.Directions;
 import app.supportclasses.GameValues;
 import app.supportclasses.SpriteSheet;
 
@@ -50,32 +51,13 @@ public class ProjectileHandler {
         projectilesLeft--;
         double mouseX = DrawingCalculator.estimateLocationFromPixel(e.getX(), gameValues.fieldXZeroOffset, gameValues.singleSquareX);
         double mouseY = DrawingCalculator.estimateLocationFromPixel(e.getY(), gameValues.fieldYZeroOffset, gameValues.singleSquareY);
-        
-        /*
-        double dY = (mouseY - location.y) + percentVelocity.y * maxSpeed;
-        double dX = (mouseX - location.x) + percentVelocity.x * maxSpeed;
-        double theta = Math.atan(dY/dX);
 
-        double xVel = Math.signum(dX) * Math.cos(theta);
-        double yVel = ((dX<0)? -1:1) * Math.sin(theta);
-        Point2D.Double projectileVelocity = new Point2D.Double(xVel, yVel);
-
-        double resultantVelocity = Math.sqrt(Math.pow(percentVelocity.x, 2) + Math.pow(percentVelocity.y, 2));
-        double projectileMaxSpeed = resultantVelocity*maxSpeed+gameValues.MAX_PROJECTILE_SPEED;
-
-        */
-
-        double dY = (mouseY - location.y);
-        double dX = (mouseX - location.x);
-        double theta = Math.atan(dY/dX);
-
-        double xVel = Math.signum(dX) * Math.cos(theta);// + percentVelocity.x;
-        double yVel = ((dX<0)? -1:1) * Math.sin(theta);// + percentVelocity.y;
+        Point2D.Double rawVelocityPercents = Directions.getPercentFromLocations(location.x, location.y, mouseX, mouseY);
 
         double projectileMaxSpeed = gameValues.MAX_PROJECTILE_SPEED+maxSpeed;
 
-        double yPercentVel = (yVel*projectileMaxSpeed + percentVelocity.y*maxSpeed)/(projectileMaxSpeed+maxSpeed);
-        double xPercentVel = (xVel*projectileMaxSpeed + percentVelocity.x*maxSpeed)/(projectileMaxSpeed+maxSpeed);
+        double yPercentVel = (rawVelocityPercents.y*projectileMaxSpeed + percentVelocity.y*maxSpeed)/(projectileMaxSpeed+maxSpeed);
+        double xPercentVel = (rawVelocityPercents.x*projectileMaxSpeed + percentVelocity.x*maxSpeed)/(projectileMaxSpeed+maxSpeed);
         Point2D.Double projectileVelocity = new Point2D.Double(xPercentVel, yPercentVel);
 
 

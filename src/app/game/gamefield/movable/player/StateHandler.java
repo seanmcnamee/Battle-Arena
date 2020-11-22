@@ -22,7 +22,6 @@ public class StateHandler {
     }
 
     public void setFighting() {
-        
         if (this.currentState == State.RECHARGING || this.currentState == State.IDLE) {
             System.out.println("Setting fighting");
             this.currentState = State.FIGHTING;
@@ -33,11 +32,9 @@ public class StateHandler {
     }
 
     public void setRecharging() {
-        
         if (this.currentState == State.FIGHTING) {
             System.out.println("Setting recharging");
             this.currentState = State.RECHARGING;
-
             if (executorService == null || executorService.isShutdown()) {
                 this.executorService = Executors.newScheduledThreadPool(2);
                 executorService.scheduleWithFixedDelay(new Thread(() -> updateWait(this)), 
@@ -49,7 +46,7 @@ public class StateHandler {
     public void setDead() {
         this.currentState = State.DEAD;
     }
-
+   
     public void updateWait(StateHandler sH) {
         if (this.currentState == State.RECHARGING) {
             if (sH.projectiles.projectilesFull()) {
@@ -62,6 +59,10 @@ public class StateHandler {
         } else {
             executorService.shutdown();
         }
+    }
+
+    public String getState() {
+        return currentState.toString();
     }
 
 }

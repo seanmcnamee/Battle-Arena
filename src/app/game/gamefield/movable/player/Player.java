@@ -14,7 +14,6 @@ import app.game.gamefield.touchable.Touchable;
 
 public class Player extends Movable {
     private boolean moveUp, moveDown, moveLeft, moveRight;
-    private int health = 3;
     private boolean isRunning;
     private ProjectileHandler projectiles;
     private StateHandler currentState;
@@ -29,8 +28,8 @@ public class Player extends Movable {
     }
 
     private void setStats() {
-        this.accelerationRate = gameValues.ACCELERATION_RATE;
-        this.maxSpeed = gameValues.MAX_SPEED;
+        this.accelerationRate = gameValues.PLAYER_ACCELERATION_RATE;
+        this.maxSpeed = gameValues.PLAYER_MAX_SPEED;
         this.isRunning = false;
     }
 
@@ -122,22 +121,28 @@ public class Player extends Movable {
     }
 
     @Override
-    public void gotHit(Movable m) {
+    public void gotHit(Touchable m, Map map) {
+        System.out.println("The player got hit");
         health -= 1;
         if (isDestroyed()) {
             this.currentState.setDead();
             this.gameValues.gameState = GameValues.GameState.LOST;
+            map.removeMovable(this);
+            System.out.println("Score: " + gameValues.score);
         }
-        //TODO add check for enemies only
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return health <= 0;
     }
 
     public ProjectileHandler getProjectiles() {
         return projectiles;
+    }
+
+    @Override
+    public void accelerate(Touchable target) {
+        //Do nothing because the player's accelerate is taken care of by key presses
+    }
+
+    public String getState() {
+        return currentState.getState();
     }
 
     /*

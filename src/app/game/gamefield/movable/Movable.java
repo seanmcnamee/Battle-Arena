@@ -9,7 +9,7 @@ import app.game.gamefield.map.Map;
 import app.game.gamefield.touchable.Touchable;
 import app.supportclasses.GameValues;
 
-public class Movable extends Touchable {
+public abstract class Movable extends Touchable {
     protected Point2D.Double percentVelocity;
     protected Point percentAcceleration;
 	protected double accelerationRate;
@@ -21,6 +21,7 @@ public class Movable extends Touchable {
         this.percentVelocity = startingVelocity;
         this.percentAcceleration = new Point();
         this.friction = gameValues.friction;
+        this.health = 1;
     }
 
     public Movable(GameValues gameValues, Point2D.Double location, Color c) {
@@ -28,10 +29,11 @@ public class Movable extends Touchable {
         this.percentVelocity = new Point2D.Double();
         this.percentAcceleration = new Point();
         this.friction = gameValues.friction;
+        this.health = 1;
     }
 
     public void accelerate(boolean up, boolean down, boolean left, boolean right) {
-        accelerate(up?1:0, down?-1:0, left?1:0, right?-1:0);
+        accelerate(up?-1:0, down?1:0, left?-1:0, right?1:0);
     }
 
     public void accelerate(int up, int down, int left, int right) {
@@ -43,6 +45,8 @@ public class Movable extends Touchable {
         percentAcceleration.y = (int)Math.signum(yAcc);
     }
 
+    public abstract void accelerate(Touchable target);
+
     public void updateVelocity() {
         //Converts from blocks/second to blocks/tick
         final double acceleration = accelerationRate/gameValues.goalTicksPerSecond;
@@ -50,21 +54,19 @@ public class Movable extends Touchable {
         final double changeWhenFull = .1;
 
         Point2D.Double tempPercentVelocity = (Point2D.Double) this.percentVelocity.clone();
-
         //Add friction and acceleration to the current velocity
-        tempPercentVelocity.x -= Math.signum(tempPercentVelocity.x)*friction + acceleration*percentAcceleration.x;
-        tempPercentVelocity.y -= Math.signum(tempPercentVelocity.y)*friction + acceleration*percentAcceleration.y;
+        tempPercentVelocity.x += -Math.signum(tempPercentVelocity.x)*friction + acceleration*percentAcceleration.x;
+        tempPercentVelocity.y += -Math.signum(tempPercentVelocity.y)*friction + acceleration*percentAcceleration.y;
 
         //Considers static and kinetic friction to be equal
-        if (Math.abs(tempPercentVelocity.x) <= friction) {
+        if (Math.abs(tempPercentVelocity.x) <= friction && Math.abs(tempPercentVelocity.y) <= friction) {
             tempPercentVelocity.x = 0;
-        }
-        if (Math.abs(tempPercentVelocity.y) <= friction) {
             tempPercentVelocity.y = 0;
         }
 
         //When the resultant of x and y are too large, lower them both 
         //this will result in the initial direction always being slightly more than the other
+        
         double resultant = Math.sqrt((Math.pow(tempPercentVelocity.x, 2) + Math.pow(tempPercentVelocity.y, 2)));
         if (resultant > 1+changeWhenFull) {
             //Lower both
@@ -116,5 +118,13 @@ public class Movable extends Touchable {
         }
         
         this.percentVelocity = new Point2D.Double(0, 0);
+    }
+
+    @Override
+    public void gotHit(Touchable m, Map map) {
+        lowerHealth();
+        if (isDestroyed()) {
+            map.removeMovable(this);
+        }
     }
 }

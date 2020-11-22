@@ -5,15 +5,11 @@ import java.awt.Point;
 
 import javax.swing.JFrame;
 
-import java.awt.Color;
-
 
 import app.supportclasses.BufferedImageLoader;
 import app.supportclasses.Button;
 import app.supportclasses.DisplayScreen;
 import app.supportclasses.GameValues;
-import app.supportclasses.Input;
-import app.supportclasses.SpriteSheet;
 
 
 
@@ -28,9 +24,9 @@ public class TitleScreen extends DisplayScreen {
     private Button btnStart, btnHighScores;
     private BufferedImageLoader background;
     private GameValues gameValues;
-    private DisplayScreen game;
+    private DisplayScreen gameScreen, highScores;
 
-    public TitleScreen(JFrame frame, GameValues gameValues, Input gameInputs, DisplayScreen game) {
+    public TitleScreen(JFrame frame, GameValues gameValues, DisplayScreen game, DisplayScreen highScores) {
         super(frame);
         background = new BufferedImageLoader(gameValues.MAIN_MENU_FILE);
         BufferedImageLoader playImg = new BufferedImageLoader(gameValues.PLAY_BUTTON_FILE);
@@ -41,7 +37,8 @@ public class TitleScreen extends DisplayScreen {
 
         
         this.gameValues = gameValues;
-        this.game = game;
+        this.gameScreen = game;
+        this.highScores = highScores;
 
         //font = setFont(gameValues);
     }
@@ -78,7 +75,7 @@ public class TitleScreen extends DisplayScreen {
         if (btnStart.contains(e.getPoint())) {
             startGame();
         } else if (btnHighScores.contains(e.getPoint())) {
-            System.out.println("High scores lol");
+            highScores();
         }
         System.out.println("Mouse clicked at: " +e.getPoint());
         
@@ -102,9 +99,13 @@ public class TitleScreen extends DisplayScreen {
     private void startGame() {
         System.out.println("Starting Game");
         System.out.println("Setting currentScreen to 'game'");
-        System.out.println("Game: " + game);
-        ((Game)game).initialize();
-        gameValues.currentScreen = game;
+        System.out.println("Game: " + gameScreen);
+        ((Game)gameScreen).initialize();
+        gameValues.currentScreen = gameScreen;
+    }
+
+    private void highScores() {
+        gameValues.currentScreen = highScores;
     }
 
     private void exitGame() {

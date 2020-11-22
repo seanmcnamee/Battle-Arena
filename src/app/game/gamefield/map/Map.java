@@ -18,6 +18,7 @@ public class Map {
     private ArrayList<Drawable> drawables; //These drawables can be removed
     private ArrayList<Touchable> touchables; //All touchables (for collision detection), not all can be removed
     private ArrayList<Movable> movables; //All movables (for tick update)
+    private EnemyGenerator enemyGenerator;
     private GameValues gameValues;
 
     public Map(GameValues gameValues) {
@@ -26,6 +27,7 @@ public class Map {
         this.touchables = new ArrayList<Touchable>();
         this.movables = new ArrayList<Movable>();
         this.gameValues = gameValues;
+        this.enemyGenerator = new EnemyGenerator(gameValues, this);
         initializeMap();
     }
 
@@ -94,11 +96,13 @@ public class Map {
         }
     }
 
-    public void tick() {
+    public void tick(Touchable target) {
+        //Move everything
         for (int i = 0; i < movables.size(); i++) {
             Movable m = movables.get(i);
             if (m == null) continue;
 
+            m.accelerate(target);
             m.updateVelocity();
             Point2D.Double nextLocation = m.getNextLocation();
             Touchable collidingTouchable = collisionWith(m, nextLocation);
@@ -108,6 +112,8 @@ public class Map {
                 m.updateLocation(this);
             }
         }
+        //Spawn new enemies
+        enemyGenerator.tick(target);
     }
 
     /**

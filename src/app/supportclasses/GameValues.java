@@ -19,9 +19,9 @@ public class GameValues {
         NOTSTARTED, RUNNING, WON, LOST, QUIT, PAUSED;
     }
 
-    /*
+    
     public static Font getFont() {
-        String GAME_FONT_FILE = "res//MainScreenFont.ttf";
+        String GAME_FONT_FILE = "res//Wide Latin Regular.ttf";
         Font returningFont = null;
         try {
             InputStream myStream = new BufferedInputStream(new FileInputStream(GAME_FONT_FILE));
@@ -32,7 +32,7 @@ public class GameValues {
             System.err.println("Font not loaded.");
         }
         return returningFont;
-    }*/
+    }
 
     //Overall Application Values
     public double gameScale = 1;
@@ -50,16 +50,19 @@ public class GameValues {
     public int framesPerSecond = 0;
 
     public final String NAME = "Battle Arena - Sean McNamee";
-    //public final Font gameFont = getFont();
-    //public double fontSize = 0;
+    public final Font gameFont = getFont();
+    public double fontSize = 0;
+    public final Color INGAME_TEXT_COLOR = Color.RED;
 
     public GameState gameState = GameState.NOTSTARTED;
     public DisplayScreen currentScreen;
 
     public boolean debugMode = false;
 
-    //TitleScreen values
+    //Button value
     public final float LIGHTEN_DARKEN_AMOUNT = 50;
+
+    //TitleScreen values
     public final double START_BUTTON_Y = .5;
     public final double START_BUTTON_X = .5;
     public final String MAIN_MENU_FILE = "res//menu_page.png";
@@ -68,7 +71,19 @@ public class GameValues {
     public final String HIGH_SCORES_BUTTON_FILE = "res//high_scores_button.png";
     public final Point2D.Double HIGH_SCORES_BUTTON_LOCATION = new Point2D.Double(.29, .6);
 
+
+    //HighScores Screen values
+    public final String HIGHSCORES_FILE = "res//high_scores_page.png";
+    public final String MAIN_MENU_BUTTON_FILE = "res//title_screen_button.png";
+    public final Point2D.Double MAIN_MENU_BUTTON_LOCATION = new Point2D.Double(.22, .89);
+    public final String HIGH_SCORES_DOCUMENT = "res//highscores.txt";
+    public final Point2D.Double SCORES_START = new Point2D.Double(.5, .1);
+
+
     /////Game Values
+    public int score = 0;
+    public final int missScore = -1;
+    public final int hitScore = 3;
     
     //GameField Sizing
     public final Point MAPSIZE = new Point(50, 50);
@@ -100,20 +115,32 @@ public class GameValues {
     public final Point SS_PLAYER_PROJECTILE_LOCATION = new Point(4, 0);
     public final Point SS_PLAYER_PROJECTILE_SIZE = new Point(1, 1);
 
+    public final Point SS_ZOMBIE_LOCATION = new Point(0, 3);
+    public final Point SS_ZOMBIE_SIZE = new Point(2, 2);
+
     //Object Sizing
     public final Point2D.Double INGAME_TILE_SIZE = new Point2D.Double(1, 1);
     public final Point2D.Double PLAYER_SIZE = new Point2D.Double(1.9, 1.9);
     public final Point2D.Double PROJECTILE_SIZE = new Point2D.Double(.25, .25);
+    public final Point2D.Double ZOMBIE_SIZE = new Point2D.Double(.9, .9);
 
     //Player
     public final int MAX_POSSIBLE_PLAYER_HEALTH = 24; //Should be divisible by 4 (2 to make it full hearts, 2 more for equal rows for display)
-    public final double ACCELERATION_RATE = 10.0;
-    public final double MAX_SPEED = 10.0;
+    public final double PLAYER_ACCELERATION_RATE = 10.0;
+    public final double PLAYER_MAX_SPEED = 10.0;
     public final double RUN_FACTOR = 1.4;
 
     public final int PLAYER_PROJECTILE_MAX = 20;
     public final double MAX_PROJECTILE_SPEED = 10;
     public final int PROJECTILE_RECHARGE_TIME = 1000;
+
+    //enemies
+    public double spawnsPerSecond = 1/7.0; //1.0/30;
+    public final double SPAWN_RATE_MULTIPLIER = 1.05;
+    public final double ENEMY_SPAWN_RADIUS = FIELD_X_SPACES/1.5;
+
+    public final double ZOMBIE_ACCELERATION_RATE = 8.0;
+    public final double ZOMBIE_MAX_SPEED = 8.0;
 
     //User inputs
     public int moveUpKey = KeyEvent.VK_W;
@@ -138,6 +165,7 @@ public class GameValues {
     public final double MINIMAP_SIZE = 1.0 / 8.0;
     public final Color MINIMAP_COLOR = new Color(0, 0, 0, 100);
     public final Color PLAYER_COLOR = Color.GREEN;
+    public final Color ZOMBIE_COLOR = Color.RED;
 
     //ProjectileBar
     public final double PROJECTILEBAR_SIZE = (1-MINIMAP_SIZE)*(1.0/(PLAYER_PROJECTILE_MAX*3));

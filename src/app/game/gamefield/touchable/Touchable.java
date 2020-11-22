@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import app.game.augments.MiniMapable;
 import app.game.gamefield.drawable.Drawable;
 import app.game.gamefield.drawable.DrawingCalculator;
-import app.game.gamefield.movable.Movable;
+import app.game.gamefield.map.Map;
 import app.supportclasses.Collisions;
 import app.supportclasses.GameValues;
 
@@ -16,7 +16,7 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
     protected HitBox hitbox;
     protected boolean shouldMap;
     protected Color colorToMap;
-
+    protected int health;
 
     public Touchable(GameValues gameValues, double xPos, double yPos, BufferedImage image, Point2D.Double sizeInBlocks) {
         this(gameValues, new Point2D.Double(xPos, yPos), image, sizeInBlocks);
@@ -27,6 +27,7 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
         this.image = image;
         this.shouldMap = false;
         this.hitbox = new HitBox();
+        this.health = Integer.MAX_VALUE;
     }
 
     public Touchable(GameValues gameValues, double xPos, double yPos, Color color) {
@@ -37,6 +38,7 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
         super(gameValues, location);
         this.shouldMap = true;
         this.colorToMap = color;
+        this.health = 1;
     }
 
 
@@ -135,12 +137,19 @@ public class Touchable extends Drawable implements MiniMapable, Destroyable {
     }
 
     @Override
-    public void gotHit(Movable m) {
+    public void gotHit(Touchable m, Map map) {
+        lowerHealth();
+        if (isDestroyed()) {
+            map.removeTouchable(this);
+        }
+    }
 
+    protected void lowerHealth() {
+        this.health--;
     }
 
     @Override
     public boolean isDestroyed() {
-        return false;
+        return health <= 0;
     }
 }
