@@ -25,7 +25,9 @@ public class EnemyGenerator {
         //Each time the time to make a new enemy comes
         if (spawnRateCounter >= 1) {
             //Decrease the time until the next one, and add the enemy
-            this.spawnsPerTick *= gameValues.SPAWN_RATE_MULTIPLIER;
+            if (spawnsPerTick < .5) {
+                this.spawnsPerTick *= gameValues.SPAWN_RATE_MULTIPLIER;
+            }
             while (spawnRateCounter >=1) {
                 addEnemy(target);
                 spawnRateCounter--;

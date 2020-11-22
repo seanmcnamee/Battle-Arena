@@ -71,7 +71,7 @@ public class HighScoreController {
     public void saveFile() throws IOException {
         Writer out = new BufferedWriter(new FileWriter(fileName));
         PrintWriter easyOut = new PrintWriter( out );
-        for (int i = 0; i <= dateScores.size(); i++) {
+        for (int i = 0; i < dateScores.size(); i++) {
             easyOut.println(dateScores.get(i).fileString());
         }
         easyOut.close();
@@ -100,7 +100,11 @@ public class HighScoreController {
      */
     private int recursiveSearch(int key, int low, int high) {
         if (high-low == 0) {
-            return high;
+            if (high == dateScores.size()-1) {
+                return dateScores.size();
+            } else {
+                return high;
+            }
         }
 
         int mid = low + (high - low) / 2;

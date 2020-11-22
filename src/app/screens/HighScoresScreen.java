@@ -68,7 +68,7 @@ public class HighScoresScreen extends DisplayScreen {
         highScoresYStart = gameValues.fieldXSize*(gameValues.SCORES_START.y);
 
         for (int i = 0; i < Math.min(highScores.getScores().size(), 11); i++) {
-            g.drawString((i+1) + ": " + highScores.getScores().get(highScores.getScores().size()-i-1), (int)highScoresXStart, (int)(highScoresYStart+i*gameValues.fontSize));
+            g.drawString((i+1) + ": " + highScores.getScores().get(i), (int)highScoresXStart, (int)(highScoresYStart+i*gameValues.fontSize));
         }
 
         // g.drawString("START", mainGUI.getContentPane().getWidth()/2 - 60,
