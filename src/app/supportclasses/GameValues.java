@@ -19,7 +19,6 @@ public class GameValues {
         NOTSTARTED, RUNNING, WON, LOST, QUIT, PAUSED;
     }
 
-    
     public static Font getFont() {
         String GAME_FONT_FILE = "res//Wide Latin Regular.ttf";
         Font returningFont = null;
@@ -125,7 +124,7 @@ public class GameValues {
     public final Point2D.Double ZOMBIE_SIZE = new Point2D.Double(.9, .9);
 
     //Player
-    public final int MAX_POSSIBLE_PLAYER_HEALTH = 24; //Should be divisible by 4 (2 to make it full hearts, 2 more for equal rows for display)
+    public final int MAX_POSSIBLE_PLAYER_HEALTH = 1; //Should be divisible by 4 (2 to make it full hearts, 2 more for equal rows for display)
     public final double PLAYER_ACCELERATION_RATE = 10.0;
     public final double PLAYER_MAX_SPEED = 10.0;
     public final double RUN_FACTOR = 1.4;

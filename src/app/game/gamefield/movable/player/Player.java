@@ -24,6 +24,7 @@ public class Player extends Movable {
         setSizings();
         this.projectiles = new ProjectileHandler(gameValues, gameValues.PLAYER_PROJECTILE_MAX);
         this.currentState = new StateHandler(projectiles, gameValues.PROJECTILE_RECHARGE_TIME);
+        this.health = gameValues.MAX_POSSIBLE_PLAYER_HEALTH;
         System.out.println(this.location.toString());
     }
 
