@@ -116,9 +116,6 @@ public class Player extends Movable {
 
     private void updateScreenPosition(double xChange, double yChange) {
         centerScreen();
-        
-        //gameValues.fieldXZeroOffset += xChange;
-        //gameValues.fieldYZeroOffset += yChange;
     }
 
     @Override
@@ -127,8 +124,6 @@ public class Player extends Movable {
         health -= 1;
         if (isDestroyed()) {
             this.currentState.setDead();
-            //this.gameValues.gameState = GameValues.GameState.LOST;
-            //map.removeMovable(this);
             System.out.println("Score: " + gameValues.score);
         }
     }

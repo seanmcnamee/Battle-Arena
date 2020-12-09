@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class StateHandler {
     //The player can be in one of these four states.
+    //Note that the change from RECHARGING to IDLE is handled internally
     public enum State {
         IDLE, FIGHTING, RECHARGING, DEAD
     }
@@ -68,5 +69,4 @@ public class StateHandler {
     public boolean isDead() {
         return currentState == State.DEAD;
     }
-
 }
