@@ -37,7 +37,7 @@ public class App extends Canvas implements Runnable {
     private Input gameInputs;
 
     //Screen specific variables
-    private DisplayScreen titleScreen, game, highScores;
+    private DisplayScreen titleScreen, game, deadScreen, highScores;
     
     /**
      * Creates all the main components of the Application
@@ -50,10 +50,12 @@ public class App extends Canvas implements Runnable {
         this.createBufferStrategy(2); // Sets the canvas buffer count TODO Change to triple buffer if rendering is choppy
         
         //Different Screens setup
-        game = new Game(frame, gameValues);
+        deadScreen = new DeadScreen(frame, gameValues);
+        game = new Game(frame, gameValues, deadScreen);
         highScores = new HighScoresScreen(frame, gameValues);
         titleScreen = new TitleScreen(frame, gameValues, game, highScores);
         ((HighScoresScreen)highScores).setTitleScreen(titleScreen);
+        ((DeadScreen)deadScreen).setHighScores((HighScoresScreen)highScores);
 
         //Start displaying/updating everything
         gameValues.currentScreen = titleScreen;
@@ -123,13 +125,7 @@ public class App extends Canvas implements Runnable {
         long previousMillis = System.currentTimeMillis();
 
         //Only update/render the application if its running
-        while (gameValues.gameState == GameState.RUNNING || gameValues.gameState == GameState.LOST) {
-
-            if (gameValues.gameState == GameState.LOST) {
-                gameValues.gameState = GameState.RUNNING;
-                ((HighScoresScreen)highScores).addMostRecentScore();
-                gameValues.currentScreen = highScores;
-            }
+        while (gameValues.gameState == GameState.RUNNING) {
 
             //Only worry about updating game logic when playing the game
             if (gameValues.currentScreen == game)   {

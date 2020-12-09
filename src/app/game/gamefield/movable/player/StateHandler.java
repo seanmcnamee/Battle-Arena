@@ -65,4 +65,8 @@ public class StateHandler {
         return currentState.toString();
     }
 
+    public boolean isDead() {
+        return currentState == State.DEAD;
+    }
+
 }

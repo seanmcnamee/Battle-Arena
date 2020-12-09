@@ -21,9 +21,12 @@ public class Game extends DisplayScreen{
     private GameValues gameValues;
     private GameField gameField;
 
-    public Game(JFrame frame, GameValues gameValues) {
+    private DisplayScreen deadScreen;
+
+    public Game(JFrame frame, GameValues gameValues, DisplayScreen deadScreen) {
         super(frame);
         this.gameValues = gameValues;
+        this.deadScreen = deadScreen;
     }
 
     public void initialize() {
@@ -36,7 +39,11 @@ public class Game extends DisplayScreen{
 
 
     public void tick() {
-        gameField.tick();
+        if (gameField.isPlayerDead()) {
+            this.gameValues.currentScreen = deadScreen;
+        } else {
+            gameField.tick();
+        }   
     }
 
     public void render(Graphics g) {

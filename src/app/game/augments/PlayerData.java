@@ -2,7 +2,6 @@ package app.game.augments;
 
 import java.awt.Font;
 import java.awt.Graphics;
-import java.text.DecimalFormat;
 
 import app.game.gamefield.movable.player.Player;
 import app.supportclasses.GameValues;

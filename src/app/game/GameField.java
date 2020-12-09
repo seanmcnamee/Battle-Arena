@@ -77,6 +77,10 @@ public class GameField {
         player.keyReleased(e);
 	}
 
+	public boolean isPlayerDead() {
+		return player.isDead();
+	}
+
     /*
     	// When a key is preesed down, this is called
 	public void keyPressed(KeyEvent e) {

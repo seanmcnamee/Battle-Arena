@@ -127,8 +127,8 @@ public class Player extends Movable {
         health -= 1;
         if (isDestroyed()) {
             this.currentState.setDead();
-            this.gameValues.gameState = GameValues.GameState.LOST;
-            map.removeMovable(this);
+            //this.gameValues.gameState = GameValues.GameState.LOST;
+            //map.removeMovable(this);
             System.out.println("Score: " + gameValues.score);
         }
     }
@@ -144,6 +144,10 @@ public class Player extends Movable {
 
     public String getState() {
         return currentState.getState();
+    }
+
+    public boolean isDead() {
+        return currentState.isDead();
     }
 
     /*
